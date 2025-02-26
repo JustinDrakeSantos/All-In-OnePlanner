@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <script src="https://kit.fontawesome.com/e6f9c99bc5.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="planner-navigation">
+        <nav>
+            <ul>
+                <li>
+                    <a href="planner.html">
+                        <img src="../Images/dashboard-interface.png" width="15" class="nav-icon">
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="daySummary.html">
+                        <img src="../Images/planning.png" width="20" class="nav-icon">
+                        Daily Planner
+                    </a>
+                </li>
+                <li>
+                    <a href="calendar.html">
+                        <img src="../Images/calendar.png" width="15" class="nav-icon">
+                        Calendar
+                    </a>
+                </li>
+                <li>
+                    <a href="moodTracker.html">
+                        <img src="../Images/smile.png" width="15" class="nav-icon">
+                        Mood
+                    </a>
+                </li>
+                <li>
+                    <a href="fitness.html">
+                        <img src="../Images/dumbbell.png" width="15" class="nav-icon">
+                        Fitness
+                    </a>
+                </li>
+                <li>
+                    <a href="journal.html">
+                        <img src="../Images/agendas.png" width="15" class="nav-icon">
+                        Journal
+                    </a>
+                </li>
+                <li>
+                    <a href="tasks.html">
+                        <img src="../Images/clipboard.png" width="15" class="nav-icon">
+                        Tasks
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="calendar-page-title">
+        <h1>Calendar</h1>
+    </div>
+    <div class="calendar">
+        <div class="calendar-header">
+            <button id="prevBtn">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <div class="monthYear" id="monthYear"></div>
+            <button id="nextBtn">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+        <div class="days">
+            <div class="day">Sunday</div>
+            <div class="day">Monday</div>
+            <div class="day">Tuesday</div>
+            <div class="day">Wednesday</div>
+            <div class="day">Thursday</div>
+            <div class="day">Friday</div>
+            <div class="day">Saturday</div>
+        </div>
+        <div class="dates" id="dates"></div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>

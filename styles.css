@@ -1,3 +1,7 @@
+/* ---- Imports ----*/
+@import url(https://fonts.googleapis.com/css2?family=Sansita:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700;1,800;1,900&family=Vina+Sans&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Sansita:wght@200..800&family=Sansita:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700;1,800;1,900&family=Vina+Sans&family=WindSong:wght@400;500&display=swap);
+
 /* (                                    (      (         (          
  )\ )      (           (   (       )  )\   ( )\        )\ )  (    
 (()/(     ))\  (      ))\  )(   ( /( ((_)  )((_)  (   (()/(  )\ ) 
@@ -524,7 +528,7 @@ input {
 }
 
 .planner-navigation a {
-    font-family: "Manrope", sans-serif;
+    font-family: "Sansita", sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -578,7 +582,7 @@ input {
     align-items: center;
     justify-content: center;
     background-color: #D4E6F6;
-    font-family: "Windsong", serif;
+    font-family: "Sansita", serif;
     height: 200px;
     font-size: 32px;
     font-weight: normal;
@@ -596,7 +600,7 @@ aside {
 }
 
 aside h3 {
-    font-family: "Manrope", sans-serif;
+    font-family: "Sansita", sans-serif;
     background-color: #D4E6F6;
     padding: 5px;
     margin-bottom: 5px;
@@ -614,7 +618,7 @@ aside h3 {
 
 .day-summary-bulk h2 {
     background-color: #F4ECE0;
-    font-family: "Manrope", sans-serif;
+    font-family: "Sansita", sans-serif;
     width: 75%;
 }
 
@@ -628,7 +632,7 @@ thead {
     border-top: 1px solid #CCC;
     border-bottom: 1px solid #CCC;
     color: #777;
-    font-family: "Manrope", sans-serif;
+    font-family: "Sansita", sans-serif;
     text-align: left;
 }
 
@@ -644,12 +648,110 @@ thead {
 .day-plan-table td, .future-plan-table td {
     text-align: left;
     padding-left: 5px;
-    font-family: "Manrope", sans-serif;
+    font-family: "Sansita", sans-serif;
     border-right: 1px solid #CCC;
 }
 
 .day-plan-table td:last-child, 
 .future-plan-table td:last-child {
     border-right: none;
+}
+
+/* ---- Calendar CSS ---- */
+
+.calendar-page-title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #D4E6F6;
+    font-family: "Sansita", serif;
+    height: 200px;
+    font-size: 32px;
+    font-weight: normal;
+}
+.calendar {
+    height: 100vh;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 20px;
+    margin-left: 90px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    font-family: "Sansita", sans-serif;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 75px;
+}
+
+.monthYear {
+    text-align: center;
+    font-weight: 600;
+    font-size: 20px;
+    width: 150px;
+}
+
+.calendar-header button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background-color: #99BADD;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-family: "Sansita", sans-serif;
+}
+
+.day {
+    text-align: center;
+    padding: 5px;
+    font-weight: 500;
+}
+
+.dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+    margin: auto;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    transition: 0.2s;
+}
+
+.date:hover,
+.date.active {
+    background-color: #99BADD;
+    color: white;
+}
+
+.date.inactive {
+    color: #757575;
+}
+
+.date.inactive:hover {
+    color: white;
 }
 
