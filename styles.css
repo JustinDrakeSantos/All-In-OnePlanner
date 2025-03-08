@@ -663,6 +663,8 @@ thead {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-left: 10px;
+    margin-left: 90px;
     background-color: #D4E6F6;
     font-family: "Sansita", serif;
     height: 200px;
@@ -670,7 +672,7 @@ thead {
     font-weight: normal;
 }
 .calendar {
-    height: 100vh;
+    height: 520px;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 20px;
@@ -679,6 +681,7 @@ thead {
     flex-direction: column;
     background-color: white;
     font-family: "Sansita", sans-serif;
+    border-bottom: solid 1px #999;
 }
 
 .calendar-header {
