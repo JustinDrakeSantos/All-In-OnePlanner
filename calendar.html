@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar</title>
-    <script src="https://kit.fontawesome.com/e6f9c99bc5.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/Styles/calendar.css">
+    <script src="./Scripts/calendar-main.js" type="module"></script>
+    <title>All-In Planner | Calendar</title>
 </head>
+
 <body>
     <div class="planner-navigation">
         <nav>
@@ -56,30 +58,454 @@
             </ul>
         </nav>
     </div>
-    <div class="calendar-page-title">
-        <h1>Calendar</h1>
-    </div>
-    <div class="calendar">
-        <div class="calendar-header">
-            <button id="prevBtn">
-                <i class="fa-solid fa-chevron-left"></i>
-            </button>
-            <div class="monthYear" id="monthYear"></div>
-            <button id="nextBtn">
-                <i class="fa-solid fa-chevron-right"></i>
-            </button>
+    <div class="app">
+            <main class="main">
+                <div class="nav">
+                    <button class="button button--icon button--secondary mobile-only">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" 
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                        class="button__icon"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/>
+                            <line x1="4" x2="20" y1="18" y2="18"/>
+                        </svg>
+                    </button>
+                    <div class="nav__date-info">
+                        <div class="nav__controls">
+                            <button class="button button--secondary desktop-only" data-nav-today-button>Today</button>
+                            <button class="button button--secondary mobile-only" data-nav-today-button>
+                                <svg xmlns="http://www.w3.org/2000/svg" 
+                                width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+                                stroke-linecap="round" stroke-linejoin="round" class="button__icon">
+                                    <path d="M8 2v4"/>
+                                    <path d="M16 2v4"/>
+                                    <rect width="18" height="18" x="3" y="4" rx="2"/>
+                                    <path d="M3 10h18"/>
+                                    <path d="M8 14h.01"/>
+                                    <path d="M12 14h.01"/>
+                                    <path d="M16 14h.01"/>
+                                    <path d="M8 18h.01"/>
+                                    <path d="M12 18h.01"/>
+                                    <path d="M16 18h.01"/>
+                                </svg>
+                            </button>
+                            <div class="nav__arrows">
+                                <button class="button button--icon button--secondary" data-nav-previous-button>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="button__icon">
+                                        <path d="m15 18-6-6 6-6"/>
+                                    </svg>
+                                </button>
+
+                                <button class="button button--icon button--secondary" data-nav-next-button>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="button__icon">
+                                        <path d="m9 18 6-6-6-6"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <time class="nav__date" data-nav-date></time>
+                    </div>
+                    <div class="select desktop-only">
+                        <select class="select__select" data-view-select>
+                            <option value="day">Day</option>
+                            <option value="week">Week</option>
+                            <option value="month" selected>Month</option>
+                        </select>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                        class="select__icon">
+                            <path d="m6 9 6 6 6-6"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="calendar" data-calendar>
+                </div>
+            </main>
+        <div class="sidebar desktop-only">
+            <button class="button button--primary button-lg" data-event-create-button>Create Event</button>
         </div>
-        <div class="days">
-            <div class="day">Sunday</div>
-            <div class="day">Monday</div>
-            <div class="day">Tuesday</div>
-            <div class="day">Wednesday</div>
-            <div class="day">Thursday</div>
-            <div class="day">Friday</div>
-            <div class="day">Saturday</div>
-        </div>
-        <div class="dates" id="dates"></div>
     </div>
-    <script src="main.js"></script>
+
+    <dialog class="dialog" data-dialog="event-form">
+        <form class="form" data-event-form>
+            <div class="dialog__wrapper">
+                <div class="dialog__header">
+                    <h2 class="dialog__title">Create Event</h2>
+                    <button class="button button--icon button--secondary" type="button" data-dialog-close-button>
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                        width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+                        stroke-linecap="round" stroke-linejoin="round" class="button__icon"><path d="M18 6 6 18"/>
+                        <path d="m6 6 12 12"/>
+                    </svg>
+                    </button>
+                </div>
+                <div class="dialog__content">
+                    <div class="form__fields">
+                        <div class="form__field">
+                            <label class="form__label" for="title">Title</label>
+                            <input class="input input--fill" id="title" name="title" type="text" placeholder="Add an Event" required autofocus>
+                        </div>
+                        <div class="form__field">
+                            <label class="form__label" for="date">Date</label>
+                            <input class="input input--fill" id="date" name="date" type="date" required>
+                        </div>
+                        <div class="form__split">
+                            <div class="form__field">
+                                <label class="form__fields" for="start-time">Start Time</label>
+                            <div class="select select--fill">
+                                <select class="select__select" id="start-time" name="start-time">
+                                    <option value="0">12:00 AM</option>
+                                    <option value="30">12:30 AM</option>
+                                    <option value="60">1:00 AM</option>
+                                    <option value="90">1:30 AM</option>
+                                    <option value="120">2:00 AM</option>
+                                    <option value="150">2:30 AM</option>
+                                    <option value="180">3:00 AM</option>
+                                    <option value="210">3:30 AM</option>
+                                    <option value="240">4:00 AM</option>
+                                    <option value="270">4:30 AM</option>
+                                    <option value="300">5:00 AM</option>
+                                    <option value="330">5:30 AM</option>
+                                    <option value="360">6:00 AM</option>
+                                    <option value="390">6:30 AM</option>
+                                    <option value="420">7:00 AM</option>
+                                    <option value="450">7:30 AM</option>
+                                    <option value="480">8:00 AM</option>
+                                    <option value="510">8:30 AM</option>
+                                    <option value="540">9:00 AM</option>
+                                    <option value="570">9:30 AM</option>
+                                    <option value="600">10:00 AM</option>
+                                    <option value="630">10:30 AM</option>
+                                    <option value="660">11:00 AM</option>
+                                    <option value="690">11:30 AM</option>
+                                    <option value="720">12:00 PM</option>
+                                    <option value="750">12:30 PM</option>
+                                    <option value="780">1:00 PM</option>
+                                    <option value="810">11:30 PM</option>
+                                    <option value="840">2:00 PM</option>
+                                    <option value="870">2:30 PM</option>
+                                    <option value="900">3:00 PM</option>
+                                    <option value="930">3:30 PM</option>
+                                    <option value="960">4:00 PM</option>
+                                    <option value="990">4:30 PM</option>
+                                    <option value="1020">5:00 PM</option>
+                                    <option value="1050">5:30 PM</option>
+                                    <option value="1080">6:00 PM</option>
+                                    <option value="1110">6:30 PM</option>
+                                    <option value="1140">7:00 PM</option>
+                                    <option value="1170">7:30 PM</option>
+                                    <option value="1200">8:00 PM</option>
+                                    <option value="1230">8:30 PM</option>
+                                    <option value="1260">9:00 PM</option>
+                                    <option value="1290">9:30 PM</option>
+                                    <option value="1320">10:00 PM</option>
+                                    <option value="1350">10:30 PM</option>
+                                    <option value="1380">11:00 PM</option>
+                                    <option value="1410">11:30 PM</option>
+                                </select>
+                            </div>
+        
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                class="select__icon">
+                                    <path d="m6 9 6 6 6-6"/>
+                                </svg>
+                            </div>
+                            <div class="form__field">
+                                <label class="form__fields" for="end-time">End Time</label>
+                            <div class="select select--fill">
+                                <select class="select__select" id="end-time" name="end-time">
+                                    <option value="30">12:30 AM</option>
+                                    <option value="60">1:00 AM</option>
+                                    <option value="90">1:30 AM</option>
+                                    <option value="120">2:00 AM</option>
+                                    <option value="150">2:30 AM</option>
+                                    <option value="180">3:00 AM</option>
+                                    <option value="210">3:30 AM</option>
+                                    <option value="240">4:00 AM</option>
+                                    <option value="270">4:30 AM</option>
+                                    <option value="300">5:00 AM</option>
+                                    <option value="330">5:30 AM</option>
+                                    <option value="360">6:00 AM</option>
+                                    <option value="390">6:30 AM</option>
+                                    <option value="420">7:00 AM</option>
+                                    <option value="450">7:30 AM</option>
+                                    <option value="480">8:00 AM</option>
+                                    <option value="510">8:30 AM</option>
+                                    <option value="540">9:00 AM</option>
+                                    <option value="570">9:30 AM</option>
+                                    <option value="600">10:00 AM</option>
+                                    <option value="630">10:30 AM</option>
+                                    <option value="660">11:00 AM</option>
+                                    <option value="690">11:30 AM</option>
+                                    <option value="720">12:00 PM</option>
+                                    <option value="750">12:30 PM</option>
+                                    <option value="780">1:00 PM</option>
+                                    <option value="810">11:30 PM</option>
+                                    <option value="840">2:00 PM</option>
+                                    <option value="870">2:30 PM</option>
+                                    <option value="900">3:00 PM</option>
+                                    <option value="930">3:30 PM</option>
+                                    <option value="960">4:00 PM</option>
+                                    <option value="990">4:30 PM</option>
+                                    <option value="1020">5:00 PM</option>
+                                    <option value="1050">5:30 PM</option>
+                                    <option value="1080">6:00 PM</option>
+                                    <option value="1110">6:30 PM</option>
+                                    <option value="1140">7:00 PM</option>
+                                    <option value="1170">7:30 PM</option>
+                                    <option value="1200">8:00 PM</option>
+                                    <option value="1230">8:30 PM</option>
+                                    <option value="1260">9:00 PM</option>
+                                    <option value="1290">9:30 PM</option>
+                                    <option value="1320">10:00 PM</option>
+                                    <option value="1350">10:30 PM</option>
+                                    <option value="1380">11:00 PM</option>
+                                    <option value="1410">11:30 PM</option>
+                                    <option value="1440">12:00 AM</option>
+                                </select>
+                            </div>
+        
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                class="select__icon">
+                                    <path d="m6 9 6 6 6-6"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="form__field">
+                            <label class="form__label" for="color">Color</label>
+                            <div class="color-select">
+                                <label class="color-select__item" style="--color-select-item-color: #2563EB">
+                                    <input class="color-select__input" type="radio" name="color" value="#2563EB" checked/>
+                                    <div class="color-select__color">
+                                        <div class="color-select__color-inner"></div>
+                                    </div>
+                                </label>
+                                <label class="color-select__item" style="--color-select-item-color: #EA580C">
+                                    <input class="color-select__input" type="radio" name="color" value="#EA580C"/>
+                                    <div class="color-select__color">
+                                        <div class="color-select__color-inner"></div>
+                                    </div>
+                                </label>
+                                <label class="color-select__item" style="--color-select-item-color: #16A34A">
+                                    <input class="color-select__input" type="radio" name="color" value="#16A34A"/>
+                                    <div class="color-select__color">
+                                        <div class="color-select__color-inner"></div>
+                                    </div>
+                                </label>
+                                <label class="color-select__item" style="--color-select-item-color: #7C3AED">
+                                    <input class="color-select__input" type="radio" name="color" value="#7C3AED"/>
+                                    <div class="color-select__color">
+                                        <div class="color-select__color-inner"></div>
+                                    </div>
+                                </label>
+                                <label class="color-select__item" style="--color-select-item-color: #E11D48">
+                                    <input class="color-select__input" type="radio" name="color" value="#E11D48"/>
+                                    <div class="color-select__color">
+                                        <div class="color-select__color-inner"></div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dialog__footer">
+                    <div class="dialog__actions">
+                        <button class="button button--secondary" type="button" data-dialog-close-button>Cancel</button>
+                        <button class="button button--primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </dialog>
+
+    <template data-template="month-calendar">
+            <div class="month-calendar" data-month-calendar>
+            <ul class="month-calendar__day-of-week-list">
+                <li class="month-calendar__day-of-week">Sunday</li>
+                <li class="month-calendar__day-of-week">Monday</li>
+                <li class="month-calendar__day-of-week">Tuesday</li>
+                <li class="month-calendar__day-of-week">Wednesday</li>
+                <li class="month-calendar__day-of-week">Thursday</li>
+                <li class="month-calendar__day-of-week">Friday</li>
+                <li class="month-calendar__day-of-week">Saturday</li>
+            </ul>
+
+            <div class="month-calendar__day-list-wrapper">
+                <ul class="month-calendar__day-list" data-month-calendar-day-list>
+                </ul>
+            </div>
+        </div>
+    </template>
+
+    <template data-template="month-calendar-day">
+        <li class="month-calendar__day" data-month-calendar-day>
+            <button class="month-calendar__day-label" data-month-calendar-day-label></button>
+            <div class="month-calendar__event-list-wrapper" data-month-calendar-list-wrapper>
+                <ul class="event-list" data-event-list></ul>
+            </div>
+        </li>
+    </template>
+
+    <template data-template="week-calendar">
+        <div class="week-calendar" data-week-calendar>
+            <ul class="week-calendar__day-of-week-list" data-week-calendar-day-of-week-list>
+            </ul>
+            
+            <ul class="week-calendar__all-day-list" data-week-calendar-all-day-list>
+            </ul>
+
+            <div class="week-calendar__content">
+                <div class="week-calendar__content-inner">
+                    <ul class="week-calendar__time-list">
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">12:00 AM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">1:00 AM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">2:00 AM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">3:00 AM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">4:00 AM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">5:00 AM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">6:00 AM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">7:00 AM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">8:00 AM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">9:00 AM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">10:00 AM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">11:00 AM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">12:00 PM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">1:00 PM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">2:00 PM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">3:00 PM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">4:00 PM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">5:00 PM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">6:00 PM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">7:00 PM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">8:00 PM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">9:00 PM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">10:00 PM</time>
+                        </li>
+                        <li class="week-calendar__time-item">
+                            <time class="week-calendar__time">11:00 PM</time>
+                        </li>
+                    </ul>
+
+                    <div class="week-calendar__columns" data-week-calendar-columns>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template data-template="week-calendar-day-of-week">
+        <li class="week-calendar__day-of-week" data-week-calendar-day-of-week>
+            <button class="week-calendar__day-of-week-button" data-week-calendar-day-of-week-button>
+                <span class="week-calendar__day-of-week-day" data-week-calendar-day-of-week-day></span>
+                <span class="week-calendar__day-of-week-number" data-week-calendar-day-of-week-number></span>
+            </button>
+        </li>
+    </template>
+
+    <template data-template="week-calendar-all-day-list-item">
+        <li class="week-calendar__all-day-list-item" data-week-calendar-all-day-list-item>
+            <ul class="event-list" data-event-list>
+                <li class="event-list__item">
+                    <button class="event event--filled">
+                        <span class="event__color"></span>
+                        <span class="event__title">My first event</span>
+                    </button>
+                </li>
+            </ul>
+        </li>
+    </template>
+
+    <template data-template="week-calendar-column">
+        <div class="week-calendar__column" data-week-calendar-column>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+            <div class="week-calendar__cell"></div>
+        </div>
+    </template>
+
+    <template data-template="event-list-item">
+        <li class="event-list__item" data-event-list-item>
+        </li>
+    </template>
+
+    <template data-template="event">
+        <button class="event" data-event>
+            <span class="event__color"></span>
+            <span class="event__title" data-event-title></span>
+            <span class="event__time">
+                <time data-event-start-time></time> - <time data-event-end-time></time>
+            </span>
+        </button>
+    </template>
 </body>
 </html>

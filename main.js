@@ -1,3 +1,5 @@
+/*Calendar JavaScript*/
+
 const monthYearElement = document.getElementById('monthYear');
 const datesElement = document.getElementById('dates');
 const prevBtn = document.getElementById('prevBtn');

@@ -10,58 +10,65 @@
     <header class="navbar-container">
         <section class="logo">
             <a href="index.html"><img src="Images/AIPLogo.png" alt="All-In Planner Logo" width="40"></a>
+            <h1>All-In Planner</h1>
         </section>
         <section class="links"> 
             <nav class="navbar">
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="developers.html">Developers</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
         </section>
         <section class="nav-buttons">
             <button id="login-button" onClick="location.href='logInForm.html'">Log In</button>
-            <button id="signup-button" onClick="location.href='logInForm.html'">Sign Up</button>
+            <button id="signup-button" onClick="location.href='signUpForm.html'">Sign Up</button>
         </section>
     </header>
     <div class="hero-section">
-        <h1 class="hero-title">All-In Planner</h1>
-        <p class="hero-slogan">Your one stop-shop for personal organization</p>
-        <section class="hero-buttons">
+        <div class="hero-section-image">
+            <img class="hero-section-image" src="./Images/hero-section-calendar.png">
+            <img class="hero-section-image" src="./Images/hero-section-dp.png">
+        </div>
+
+        <div class="hero-content">
+            <h1 class="hero-title">All-In Planner</h1>
+            <p class="hero-slogan">Your one stop-shop for personal organization</p>
+            <section class="hero-buttons">
             <button id="GTP-button" onClick="location.href='logInForm.html'">Go to Planner</button>
-            <button id="signup-button" onClick="location.href='logInForm.html'">Sign Up</button>
+            <button id="signup-button" onClick="location.href='signUpForm.html'">Sign Up</button>
         </section>
+        </div>
         
     </div>
-    <div class="feature-section">
+    <div class="feature-section" id="about">
         <div class="feature-title-container">
-            <section class="feature-title">
+            <section class="feature-title" id="title1">
                 <h2>
                     Calendar
                 </h2>
                 <p>Your All-In-One Scheduling Hub</p>
             </section>
-            <section class="feature-title">
+            <section class="feature-title" id="title2">
                 <h2>
                     Mood Tracker
                 </h2>
                 <p>Reflect & Elevate Your Well-Being</p>
             </section>
-            <section class="feature-title">
+            <section class="feature-title" id="title3">
                 <h2>
                     Fitness & Health
                 </h2>
                 <p>Achieve Your Wellness Goals</p>
             </section>
-            <section class="feature-title">
+            <section class="feature-title" id="title4">
                 <h2>
                     Journal
                 </h2>
                 <p>A space for self-reflection, creativity, and personal-growth.</p>
             </section>
-            <section class="feature-title">
+            <section class="feature-title" id="title5">
                 <h2>
                     Task Management
                 </h2>
@@ -69,7 +76,7 @@
             </section>
         </div>
         <div class="feature-description-container">
-            <section class="feature-description">
+            <section class="feature-description" id="desc1">
                 <p>Stay organized and in control with our intuitve calendar section.
                     Plan your days, weeks, and months effortlessly with: 
     
@@ -82,7 +89,7 @@
                     Stay ahead, stay productive, and make everyday count!
                 </p>
             </section>
-            <section class="feature-description">
+            <section class="feature-description" id="desc2">
                 <p>
                     Track your emotions and gain insights into your mental wellness with our <strong>Mood Tracker.</strong>
     
@@ -96,7 +103,7 @@
                     Your journey to self-awareness and balance starts here!
                 </p>
             </section>
-            <section class="feature-description">
+            <section class="feature-description" id="desc3">
                 <p>
                     Stay on top of your health with easy-to-use fitness tracking tools.
                     <ul>
@@ -108,7 +115,7 @@
                     Your fitness journey, simplified and structured!
                 </p>
             </section>
-            <section class="feature-description">
+            <section class="feature-description" id="desc4">
                 <ul>
                     <li>Daily Entries & Prompts - Write freely or use guided prompts for inspiration</li>
                     <li>Gratitude and Reflection Logs - Cultivate positivity and mindfullness</li>
@@ -118,7 +125,7 @@
                 Write, reflect, grow -- one entry at a time!
             </section>
             <div class="feature-item">
-            <section class="feature-description">
+            <section class="feature-description" id="desc5">
                 Stay on Top of your to-dos and boost productivity with powerful task management tools
                 <ul>
                     <li>Smart Task Lists - Organize your work, personal, and daily tasks seamlessly</li>
@@ -127,6 +134,29 @@
                 </ul>
                 Plan smarter, work better, and accomplish more!
             </section>
+        </div>
+    </div>
+    <div class="contact" id="contact">
+        <div class="contact-message">
+            <p>
+                Notice any bugs on the website? Want to recommend changes? Email us for inquiries. We'll happily get back to you with 
+                answers to your questions. Just leave your message below! 
+            </p>
+        </div>
+        <div class="contact-form">
+            <form>
+                <fieldset>
+                    <legend id="contact-form-title">Contact Us</legend>
+                    <label>Name:</label>
+                    <input type="text" name="contact-name">
+                    <label>Email:</label>
+                    <input type="email" name="contact-email">
+                    <label>Subject:</label>
+                    <input type="text" name="contact-subject">
+                    <label>Message:</label>
+                    <input type="text" name="contact-message">
+                </fieldset>
+            </form>
         </div>
     </div>
 </body>

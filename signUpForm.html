@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>All-In Planner | Log In</title>
+    <title>Create Account</title>
 </head>
-<body class="login-form-body">
+<body class="sign-up-form-body">
     <header class="navbar-container">
         <section class="logo">
             <a href="index.html"><img src="Images/AIPLogo.png" alt="All-In Planner Logo" width="40"></a>
@@ -25,35 +25,54 @@
             <button id="signup-button" onClick="location.href='signUpForm.html'">Sign Up</button>
         </section>
     </header>
-    <div class="login-form-container">
-        <form class="login-form">
+    <div class="sign-up-form-container">
+        <form class="sign-up-form">
             <fieldset>
                 <legend>
-                    <img src="./Images/AIPLogo.png" width="75px">
-                    Log In
+                    <img src="./Images/AIPLogo.png" width="40px">
+                    Create an Account
                 </legend>
-                <p><label>Email</label></p>
+
+                <p>
+                    <label>Email:</label>
+                </p>
+
                 <p>
                     <input type="email" name="email" placeholder="Type your Email" required>
                 </p>
+
                 <p>
-                    <label>Password</label>
+                    <label>Confirm Email:</label>
                 </p>
+
+                <p>
+                    <input type="email" name="email" placeholder="Retype your Email" required>
+                </p>
+
+                <p>
+                    <label>Password:</label>
+                </p>
+
                 <p>
                     <input type="password" name="password" placeholder="Type your Password" required>
                 </p>
+
                 <p>
-                    <a href="resetPassword.html" class="forgotPass">Forgot Password?</a>
+                    <label>Confirm Password:</label>
+                </p>
+
+                <p>
+                    <input type="password" name="password" placeholder="Retype your Password" required>
                 </p>
                 <section>
-                    <button class="login-form-button" onClick="location.href='planner.html'">Log In</button>
+                    <button class="sign-up-form-button" onClick="location.href='logInForm.html'">Create Account</button>
                 </section>
-                <p class="noAcc">
-                    Don't have an account? <a href="signUpForm.html"> &nbsp; Create one</a>
+                <p class="already-have-account">
+                    Already have an account? <a href="logInForm.html"> &nbsp; Sign In</a>
                 </p>
-                <hr>
             </fieldset>
         </form>
     </div>
+    <hr>
 </body>
 </html>

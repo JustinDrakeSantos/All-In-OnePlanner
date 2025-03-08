@@ -10,10 +10,19 @@
   | (_ |/ -_)| ' \))/ -_) | '_|/ _` || |   | _ \/ _ \/ _` | | || |
    \___|\___||_||_| \___| |_|  \__,_||_|   |___/\___/\__,_|  \_, |
                                                              |__/ */
+* {
+    font-family: "Sansita", sans-serif;
+}
+
 body {
     padding: 0px;
     margin: 0px;
 }
+
+html {
+    scroll-behavior: smooth;
+}
+
 
 /*                                              )                             
  (                                    (    ( /(              (              
@@ -30,6 +39,12 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between logo image and text */
 }
 
 /*     )                      (                                  )                             
@@ -68,31 +83,38 @@ header {
 .nav-links a {
     text-decoration: none;
     color: #333333;
-    font-weight: 500;
+    font-weight: 700;
 }
 
 /* Home Screen Nav Buttons */
 .nav-buttons {
     display: flex;
     gap: 10px;
+    padding-left: 0;
+    margin-left: 0;
 }
 
 #login-button {
-    background-color: #f0f0f0;
-    border: 1px solid #cccccc;
-    padding: 8px 15px;
-    border-radius: 5px;
+    background-color: #D4E6F6;
+    border: 1px solid #99BADD;
+    padding: 12px 20px;
+    border-radius: 10px;
     cursor: pointer;
+    font-size: 1.5em;
+    font-family: "Sansita", sans-serif;
 }
 
 #signup-button {
     background-color: black;
     color: white;
     border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.5em;
     cursor: pointer;
     text-decoration: none;
+    font-family: "Sansita", sans-serif;
 }
 
 /*Responsive Design*/
@@ -116,45 +138,111 @@ header {
 /* Hero Section layout & styling */
 .hero-section {
     display: flex;
+    position: relative;
     flex-direction: column;
     padding: 0px;
     margin: 0px;
-    background-color: #D0BD9F;
     align-items: center;
     justify-content: center;
     text-align: center;
-    height: 500px;
-    box-shadow: inset 0 8px 15px rgba(0,0,0,0.5);
+    height: 100vh;
+    box-shadow: inset 0 8px 15px rgba(0, 0, 0, 0.5);
+    overflow: hidden; /* Ensures images don’t overflow */
 }
 
+/* Hero section background images */
+.hero-section-image {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: absolute; /* Set absolute so text stays above */
+    top: 0;
+    left: 0;
+}
+
+.hero-section-image img {
+    width: 50%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+}
+
+/* Dark overlay */
+.hero-section-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+/* Ensures images are placed correctly behind the content */
+.hero-section-image img {
+    position: relative;
+    z-index: 0;
+}
+
+/* Hero Content: Keeps text centered */
+.hero-content {
+    position: absolute;
+    z-index: 2; /* Places text above images & overlay */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    color: white; /* Ensures text contrasts with dark overlay */
+}
+
+/* Hero Title */
 .hero-title {
     display: flex;
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 5em;
     padding: 5px;
     margin: 5px;
+    z-index: 3;
+    color: #99BADD;
 }
 
+/* Hero Slogan */
 .hero-slogan {
     display: flex;
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 2em;
-    color: #757575;
+    color: white; /* Lighter shade for readability */
+    z-index: 3;
 }
 
+/* Button styling */
 .hero-buttons {
     display: flex;
     gap: 10px;
+    z-index: 3;
 }
 
 #GTP-button {
-    background-color: #f0f0f0;
-    border: 1px solid #cccccc;
-    padding: 8px 15px;
-    border-radius: 5px;
+    font-family: "Sansita", sans-serif;
+    background-color: #D4E6F6;
+    border: 1px solid #99BADD;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.5em;
     cursor: pointer;
     text-decoration: none;
+    transition: background 0.3s ease;
 }
+
+#GTP-button:hover {
+    background-color: #5C7FA3;
+    color: white;
+}
+
+#signup-button:hover {
+    background-color: #e0e0e0;
+    color: black;
+}
+
 
 /* Feature Section layout & styling */
 
@@ -180,7 +268,7 @@ header {
 }
 
 .feature-description-container {
-    width: 65%;
+    width: 67%;
 }
 
 .feature-title, .feature-description {
@@ -204,7 +292,7 @@ header {
 }
 
 .feature-description {
-    background-color: #D9D9D9;
+    background-color: #D4E6F6;
     text-align: left;
     justify-content: center;
     height: 150px;
@@ -221,10 +309,35 @@ header {
     margin: 5px;
 }
 
+/*---- Landing Page Contact  ----*/
+.contact {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
 
+.contact-message {
+    width: 90%;
+    font-size: 1.5em;
+    letter-spacing: 0.05em;
+    word-spacing: 0.3em;
+    text-align: center;
+    font-weight: 600;
+}
 
-/* ---- Log In Page CSS ---- */
-.login-form-body {
+.contact-form {
+    background-color: white;
+    border-radius: 10px;
+    height: auto;
+    width: 90%;
+}
+
+/* ---- Log In Page & Sign Up Form ---- */
+.login-form-body, 
+.sign-up-form-body {
     background-color: #99BADD;
 }
 
@@ -240,20 +353,43 @@ header {
     border-radius: 20px;
 }
 
+.sign-up-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: white;
+    padding: 50px 40px;
+    margin: 100px;
+    height: auto;
+    border-radius: 20px;
+}
+
 fieldset {
     outline: none;
     border: none; 
     width: 100%;
 }
 
-legend {
+.login-form legend {
     font-size: 5em;
-    padding: 30px;
-    margin: 30px;
-    font-family: "Sansita", serif;
+    display: flex;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    gap: 30px;
 }
 
-.login-form-button {
+.sign-up-form-container legend {
+    font-size: 3em;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+.login-form-button,
+.sign-up-form-button {
     font-family: "Sansita", sans-serif;
     font-size: 100%;
     background-image: linear-gradient(to top, gray, black);
@@ -270,8 +406,19 @@ label {
     color: darkgray;
 }
 
+.sign-up-form-container label {
+    color: darkgray;
+}
+
 input {
     font-family: "Sansita", sans-serif;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    width: 100%;
+}
+
+.sign-up-form-container input {
     border-top: none;
     border-right: none;
     border-left: none;
@@ -288,7 +435,6 @@ input {
 
 .noAcc {
     display: flex;
-    font-family: "Sansita", sans-serif;
     justify-content: center;
     text-decoration: none;
     color: darkgray;
@@ -297,6 +443,18 @@ input {
 .noAcc a {
     text-decoration: none;
 }
+
+.already-have-account {
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    color: darkgray;
+}
+
+.already-have-account a {
+    text-decoration: none;
+}
+
 
 /* ---- Dashboard CSS ---- */
 
@@ -577,16 +735,19 @@ input {
     color: white;
 }
 
-.planner-page-title {
+.planner-page-greeting {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #D4E6F6;
     font-family: "Sansita", serif;
-    height: 200px;
-    font-size: 32px;
+    height: auto;
+    font-size: 2.4em;
     font-weight: normal;
-    border-bottom: 4px dashed #E3D5C1;
+    margin-left: 100px;
+}
+
+.planner-page-greeting h1 {
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.1em;
 }
 
 aside {
