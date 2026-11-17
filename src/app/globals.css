@@ -1,0 +1,423 @@
+@import "tailwindcss";
+
+/*
+ * All-In Planner design tokens, in three layers (see the design-system skill):
+ *
+ *   1. Primitives  — the raw brand palette. Never used directly by components.
+ *   2. Semantic    — what a color is for (page, text, primary action…), mapped
+ *                    per theme. Components and Tailwind utilities use these.
+ *   3. Component   — tokens owned by one pattern (focus ring, tones, charts).
+ *
+ * Brand: glacier blue #62A7EA (primary), navy #0C1B48 (secondary), lemon #F2EA1E (accent).
+ * Contrast notes: navy on glacier 6.5:1 (primary buttons); glacier-800 on white
+ * 6.0:1 (links); glacier itself is too light for text on white (2.55:1).
+ * Lemon is a highlight only and never used as text on white.
+ *
+ * The theme is data-theme on <html>, set before paint by src/lib/theme-script.ts.
+ */
+
+/* 1. Primitives -------------------------------------------------------------- */
+:root {
+  --glacier-50: #f0f6fd;
+  --glacier-100: #e6f1fc;
+  --glacier-200: #dcebfb;
+  --glacier-300: #8cc1f2;
+  --glacier-400: #7cb6ee;
+  --glacier-500: #62a7ea;
+  --glacier-600: #4f9ae4;
+  --glacier-650: #4893e0;
+  --glacier-700: #3b8bdb;
+  --glacier-800: #1f64ae;
+  --glacier-900: #16336a;
+
+  --navy-400: #8fa0d0;
+  --navy-500: #5f74b8;
+  --navy-700: #2c4185;
+  --navy-750: #1e3170;
+  --navy-800: #1b2e68;
+  --navy-850: #132459;
+  --navy-900: #0c1b48;
+  --navy-950: #091539;
+
+  --mist-0: #ffffff;
+  --mist-50: #f3f7fc;
+  --mist-100: #e6edf6;
+  --mist-150: #e1e7f0;
+  --mist-200: #cfd9e6;
+  --mist-500: #5b6782;
+  --mist-600: #45526e;
+  --frost-100: #e8eef9;
+  --frost-300: #a8b5d1;
+  --frost-400: #8e9cbd;
+
+  --lemon-100: #fbf8c9;
+  --lemon-500: #f2ea1e;
+  --lemon-600: #e3d80c;
+  --lemon-950: #3a3f2a;
+
+  --slate-500: #8590a6;
+
+  --red-50: #fcebea;
+  --red-300: #ff8a80;
+  --red-700: #b3261e;
+  --red-950: #3d1b2a;
+  --green-50: #e4f4ea;
+  --green-300: #6fdc9c;
+  --green-700: #1d7a4a;
+  --green-950: #123a35;
+}
+
+/* 2. Semantic: light (default) ----------------------------------------------- */
+:root,
+[data-theme="light"] {
+  --bg: var(--mist-0);
+  --surface: var(--mist-0);
+  --surface-2: var(--mist-50);
+  --surface-3: var(--mist-100);
+  --fg: var(--navy-900);
+  --muted: var(--mist-600);
+  --subtle: var(--mist-500);
+  --line: var(--mist-150);
+  --input: var(--mist-200);
+
+  --primary: var(--glacier-500);
+  --primary-hover: var(--glacier-600);
+  --primary-fg: var(--navy-900);
+  --primary-ink: var(--glacier-800);
+  --primary-soft: var(--glacier-100);
+
+  --secondary: var(--navy-900);
+  --secondary-hover: var(--navy-800);
+  --secondary-fg: var(--mist-0);
+
+  --accent: var(--lemon-500);
+  --accent-soft: var(--lemon-100);
+  --accent-fg: var(--navy-900);
+
+  --danger: var(--red-700);
+  --danger-soft: var(--red-50);
+  --success: var(--green-700);
+  --success-soft: var(--green-50);
+
+  --sidebar: var(--glacier-50);
+  --sidebar-active: var(--glacier-200);
+
+  /* 3. Component tokens (light) */
+  --chart-1: var(--glacier-700); /* validated against --surface: lightness, chroma, 3:1 */
+  --tone-glacier: var(--glacier-500);
+  --tone-navy: var(--navy-900);
+  --tone-lemon: var(--lemon-600);
+  --tone-slate: var(--slate-500);
+  --tone-on-glacier: var(--navy-900);
+  --tone-on-navy: var(--mist-0);
+  --tone-on-lemon: var(--navy-900);
+  --tone-on-slate: var(--mist-0);
+  --elev-card: 0 1px 2px rgb(12 27 72 / 0.05), 0 1px 1px rgb(12 27 72 / 0.03);
+  --elev-pop: 0 12px 32px rgb(12 27 72 / 0.14), 0 2px 6px rgb(12 27 72 / 0.08);
+  --scrim: rgb(8 18 47 / 0.5);
+
+  color-scheme: light;
+}
+
+/* 2. Semantic: dark ---------------------------------------------------------- */
+[data-theme="dark"] {
+  --bg: var(--navy-900);
+  --surface: var(--navy-900);
+  --surface-2: var(--navy-850);
+  --surface-3: var(--navy-800);
+  --fg: var(--frost-100);
+  --muted: var(--frost-300);
+  --subtle: var(--frost-400);
+  --line: var(--navy-750);
+  --input: var(--navy-700);
+
+  --primary: var(--glacier-500);
+  --primary-hover: var(--glacier-400);
+  --primary-fg: var(--navy-900);
+  --primary-ink: var(--glacier-300);
+  --primary-soft: var(--glacier-900);
+
+  --secondary: var(--frost-100);
+  --secondary-hover: var(--mist-0);
+  --secondary-fg: var(--navy-900);
+
+  --accent: var(--lemon-500);
+  --accent-soft: var(--lemon-950);
+  --accent-fg: var(--navy-900);
+
+  --danger: var(--red-300);
+  --danger-soft: var(--red-950);
+  --success: var(--green-300);
+  --success-soft: var(--green-950);
+
+  --sidebar: var(--navy-950);
+  --sidebar-active: var(--glacier-900);
+
+  /* 3. Component tokens (dark) */
+  --chart-1: var(--glacier-650); /* validated against the navy surface */
+  --tone-glacier: var(--glacier-500);
+  --tone-navy: var(--navy-400);
+  --tone-lemon: var(--lemon-500);
+  --tone-slate: var(--slate-500);
+  --tone-on-glacier: var(--navy-900);
+  --tone-on-navy: var(--navy-900);
+  --tone-on-lemon: var(--navy-900);
+  --tone-on-slate: var(--navy-900);
+  --elev-card: 0 0 0 1px rgb(255 255 255 / 0.04);
+  --elev-pop: 0 16px 40px rgb(0 0 0 / 0.45);
+  --scrim: rgb(3 8 24 / 0.6);
+
+  color-scheme: dark;
+}
+
+/* Without JavaScript the script can't set data-theme; follow the system setting. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: var(--navy-900);
+    --surface: var(--navy-900);
+    --surface-2: var(--navy-850);
+    --surface-3: var(--navy-800);
+    --fg: var(--frost-100);
+    --muted: var(--frost-300);
+    --subtle: var(--frost-400);
+    --line: var(--navy-750);
+    --input: var(--navy-700);
+    --primary-ink: var(--glacier-300);
+    --primary-soft: var(--glacier-900);
+    --sidebar: var(--navy-950);
+    --sidebar-active: var(--glacier-900);
+    --chart-1: var(--glacier-650);
+    color-scheme: dark;
+  }
+}
+
+/* `dark:` utilities follow the chosen theme, not just the system setting. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-line: var(--line);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-ink: var(--primary-ink);
+  --color-primary-soft: var(--primary-soft);
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-fg: var(--secondary-fg);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-fg: var(--accent-fg);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-active: var(--sidebar-active);
+  --color-chart-1: var(--chart-1);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Sansita is kept for the wordmark only. */
+  --font-brand: var(--font-sansita), ui-serif, Georgia, serif;
+
+  --shadow-card: var(--elev-card);
+  --shadow-pop: var(--elev-pop);
+
+  /* Type scale: page title, section heading, panel heading, metadata, and micro labels. */
+  --text-page: 1.75rem;
+  --text-page--line-height: 1.15;
+  --text-page--letter-spacing: -0.02em;
+  --text-page-lg: 2rem;
+  --text-page-lg--line-height: 1.15;
+  --text-page-lg--letter-spacing: -0.022em;
+  --text-section: 1.0625rem;
+  --text-section--line-height: 1.4;
+  --text-panel: 0.9375rem;
+  --text-panel--line-height: 1.45;
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.4;
+  --text-micro: 0.6875rem;
+  --text-micro--line-height: 1.3;
+
+  /* Motion: one easing curve for arrivals; exits run faster than entrances. */
+  --ease-arrive: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-pop: pop 180ms var(--ease-arrive);
+  --animate-rise: rise 220ms var(--ease-arrive);
+  --animate-toast: rise 260ms var(--ease-arrive);
+  /* The landing page's single load sequence: copy first, then the product. */
+  --animate-hero-in: hero-in 700ms var(--ease-arrive) both;
+  --animate-media-in: media-in 900ms var(--ease-arrive) both;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--primary-ink);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-fg);
+  }
+
+  /* Edge adds its own reveal eye to password fields; the app provides one. */
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
+
+  dialog::backdrop {
+    background: var(--scrim);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Color tones: set data-tone="glacier|navy|lemon|slate" on an element. */
+  /* --tone-mix sets how strongly each tone tints a block, so each reads as itself rather than gray. */
+  [data-tone="glacier"] {
+    --tone: var(--tone-glacier);
+    --tone-on: var(--tone-on-glacier);
+    --tone-mix: 24%;
+  }
+  [data-tone="navy"] {
+    --tone: var(--tone-navy);
+    --tone-on: var(--tone-on-navy);
+    /* Navy diluted with white turns gray, so tinted blocks use a lighter indigo of the same hue. */
+    --tone-tint: var(--navy-500);
+    --tone-mix: 20%;
+  }
+  [data-tone="lemon"] {
+    --tone: var(--tone-lemon);
+    --tone-on: var(--tone-on-lemon);
+    --tone-mix: 30%;
+  }
+  [data-tone="slate"] {
+    --tone: var(--tone-slate);
+    --tone-on: var(--tone-on-slate);
+    --tone-mix: 16%;
+  }
+  [data-theme="dark"] [data-tone] {
+    --tone-tint: var(--tone);
+    --tone-mix: 24%;
+  }
+
+  /* A soft tinted block (calendar events). Text stays in the normal text color. */
+  .tone-soft {
+    background: color-mix(in srgb, var(--tone-tint, var(--tone, var(--tone-glacier))) var(--tone-mix, 20%), var(--surface));
+    color: var(--fg);
+  }
+  .tone-soft:hover {
+    background: color-mix(in srgb, var(--tone-tint, var(--tone, var(--tone-glacier))) calc(var(--tone-mix, 20%) + 8%), var(--surface));
+  }
+  .tone-dot {
+    background: var(--tone, var(--tone-glacier));
+  }
+  .tone-solid {
+    background: var(--tone, var(--tone-glacier));
+    color: var(--tone-on, var(--fg));
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--surface-2) 0%, var(--surface-3) 50%, var(--surface-2) 100%);
+    background-size: 200% 100%;
+    animation: skeleton 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes skeleton {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.8);
+  }
+  60% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes media-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

@@ -1,0 +1,31 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# Creates one Node web service that builds the app and runs `npm start`
+# (which applies database migrations first).
+services:
+  - type: web
+    name: all-in-planner
+    runtime: node
+    plan: free
+    branch: main
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      # Render's disk is wiped on every deploy and restart, so entries need a
+      # hosted database. Create a free Turso database and paste its URL
+      # (libsql://...) and auth token here. Left empty, the app falls back to a
+      # local SQLite file that is erased on each deploy.
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_AUTH_TOKEN
+        sync: false
+      # Optional: outgoing email for password resets and contact replies,
+      # e.g. smtp://user:pass@smtp.example.com:587
+      - key: SMTP_URL
+        sync: false
+      - key: MAIL_FROM
+        sync: false
+      # Password-reset links use the service's Render URL automatically.
+      # Set APP_URL only if you add a custom domain.
