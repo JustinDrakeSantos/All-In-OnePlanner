@@ -92,7 +92,7 @@ function defaultStart(date: string, today: string, nowMinute: number) {
   return Math.min(23 * 60, Math.ceil((nowMinute + 1) / 60) * 60);
 }
 
-/** Today's date number gets the lemon accent. */
+/** Today's date number gets the gold accent. */
 function DayNumber({ day, isToday, outside = false, size = "md" }: { day: string; isToday: boolean; outside?: boolean; size?: "md" | "lg" }) {
   return (
     <span

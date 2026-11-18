@@ -1,8 +1,79 @@
 # All-In Planner
 
-Your one-stop shop for personal organization: a calendar, task manager, daily planner, journal, mood tracker, and fitness & health log that share the same day and the same data.
+A personal planner that keeps a calendar, task manager, daily planner, journal, mood tracker, and fitness and habit log in one web app, all reading from the same day. Add a task due today and it shows up on the calendar, in the daily plan, and on the dashboard; write a journal entry and it shows how you felt that day.
 
-This is a full-stack rewrite of the original static HTML/CSS/JS site, which is preserved unchanged in [`legacy/`](legacy/).
+This is a full-stack rewrite of an earlier static HTML/CSS/JavaScript version, which is kept unchanged in [`legacy/`](legacy/).
+
+## What it is
+
+- **For:** students and busy people who want one place to plan the day, track what got done, and look back on how it went, instead of juggling separate calendar, to-do, journal, and fitness apps.
+- **What it does:** accounts with private data; a dashboard and a daily planner; month, week, and day calendar views; task lists with priorities, due dates, repeating tasks, and streaks; a journal with prompts, tags, and search; a daily mood check-in with trends; workouts, meals, water, weight, steps, sleep, and habits; light and dark themes; data export and account deletion.
+- **How it's built:** a Next.js 16 / React 19 / TypeScript app with server-side rendering and Server Actions, a SQLite (libsql) database through Drizzle ORM, custom session authentication, Tailwind CSS 4 with a token-based design system, and Vitest and Playwright tests.
+
+## Portfolio summary
+
+A structured overview for portfolio sites and other tools that describe this project. Every value is taken from this repository.
+
+```yaml
+name: All-In Planner
+tagline: Your calendar, tasks, journal, mood, and workouts on one page.
+type: Full-stack web application
+summary: >
+  A personal planner that combines a calendar, task manager, daily planner, journal,
+  mood tracker, and fitness and habit log in one app that shares the same day and data.
+  Rebuilt from a static HTML/CSS/JS prototype into a server-rendered Next.js app with
+  accounts, a database, an accessible light/dark design system, and automated tests.
+status: In development. Deployment to Render is configured (render.yaml) but the app is not live yet.
+repository: https://github.com/JustinDrakeSantos/All-In-OnePlanner
+live_url: null                      # fill in once deployed
+original_version_url: https://justindrakesantos.github.io/All-In-OnePlanner/   # the first, static version
+timeline:
+  original_static_site: 2025
+  full_stack_rewrite: 2026
+platforms: [Web (desktop, tablet, and phone browsers)]
+stack:
+  frontend: [Next.js 16 (App Router), React 19, TypeScript 5.9, Tailwind CSS 4, lucide-react icons]
+  backend: [Next.js Server Components and Server Actions, Node.js 20+, Zod 4 validation, Nodemailer]
+  database: [SQLite via libsql (Turso-compatible), Drizzle ORM 0.45 with SQL migrations]
+  auth: [Custom session auth (no auth library), scrypt password hashing, SHA-256-hashed session and reset tokens, httpOnly cookies, rate limiting]
+  testing: [Vitest (unit and database tests), Playwright (end-to-end tests in Microsoft Edge)]
+  tooling: [ESLint, Render Blueprint deployment config, Playwright + WebCodecs (mediabunny) for recording the product clips]
+features:
+  - Dashboard with today's schedule, tasks due, mood, habits, water, and weekly progress
+  - Daily planner for any day, with carried-over tasks and links to that day's mood and journal
+  - Calendar with month, week, and day views, reminders, and overlapping events laid out side by side
+  - Tasks with lists, priorities, due dates, repeating tasks, completion stats, and streaks
+  - Journal with daily prompts, gratitude and reflection entries, tags, and search
+  - Mood check-ins with energy and emotions, a 30-day trend, and weekday patterns
+  - Fitness and health log for workouts, meals, water, weight, steps, sleep, and habits
+  - Accounts with password reset, data export (JSON), account deletion, and import from the original version
+  - Light, dark, and system themes
+highlights:
+  - Every tool shares one day of data; time zones are handled per user (fixing an off-by-one-day bug in the original)
+  - Partial Prerendering: each page's static shell is prerendered and personal data streams in per request, never cached
+  - Per-user data isolation enforced in the data layer and covered by tests
+  - Token-based design system with WCAG 2.2 AA contrast checked for light and dark themes, keyboard support, and reduced-motion support
+  - Landing page product clips are recorded automatically from the real app by a script with a drawn cursor, encoded to H.264 MP4 in the browser (no ffmpeg), and shown through a "camera" that zooms in on the action using the recorded cursor path
+  - Hero background is a generated topographic map (marching-squares contours over a warped terrain); when the page scrolls, four contour lines morph point for point into the dashboard's layout before the clip fades in
+  - Scroll-linked landing animations built with CSS scroll timelines (no scroll listeners), including a large moon behind the page that waxes into the sun (shown through clipped per-section windows so it stays under content on solid backgrounds), with complete static fallbacks
+  - 98 unit tests and 21 end-to-end tests (as of November 2026)
+media:                               # paths relative to the repository root
+  logo: public/images/logo.png
+  hero_image: public/demos/dashboard-light.webp          # 1920×1200 still of the dashboard
+  hero_image_dark: public/demos/dashboard-dark.webp
+  hero_video: public/demos/dashboard-light.mp4           # ~8 s muted clip of the dashboard in use
+  feature_images:                                        # first frames of each feature clip, 1920×1200
+    tasks: public/demos/tasks-light.webp
+    calendar: public/demos/calendar-light.webp
+    daily_planner: public/demos/planner-light.webp
+    journal: public/demos/journal-light.webp
+    mood: public/demos/mood-light.webp
+    fitness: public/demos/fitness-light.webp
+  feature_videos: public/demos/<feature>-<light|dark>.mp4
+demo_account:                         # local development only, created by `npm run db:seed`
+  email: demo@example.com
+  password: demo-password
+```
 
 ## Features
 
@@ -26,24 +97,45 @@ The tokens live in [`src/app/globals.css`](src/app/globals.css) and are defined 
 | Role | Color | Used for |
 |---|---|---|
 | Primary | Glacier blue `#62A7EA` | The main action on each screen (navy text on glacier, 6.5:1), selection, progress |
-| Secondary | Navy `#0C1B48` | Text in light mode, the page background in dark mode, the closing band on the landing page |
-| Accent | Lemon `#F2EA1E` | Today's date, streaks, the journal prompt. Never used as text on white |
+| Secondary | Navy `#0C1B48` | Text in light mode, the page background in dark mode, the navy bands on the landing page |
+| Accent | Gold `#D4A017` | Badges and numbered markers with navy labels (≈7:1), today's date, streaks, the sunrise and underline artwork. Never text on white (2.4:1) |
+| Accent ink | Dark gold `#8A6500` | Small accent text and icons on light backgrounds (5.3:1 on white) |
+| Accent soft | Soft gold `#FFF3CC` | Highlighted surfaces with navy text (15:1), such as the journal prompt |
 
-- **Tones.** Events, task lists, and habits pick one of four tones (glacier, navy, lemon, slate), stored by name so each tone can look right in light and dark mode.
-- **Type.** Inter for the interface; Sansita (the original brand face) only for the wordmark and the landing-page headlines.
+- **Tones.** Events, task lists, and habits pick one of four tones (glacier blue, navy, gold, slate), stored by name so each tone can look right in light and dark mode. (Gold is stored as `lemon`, from before the accent changed.)
+- **Type.** Inter for the interface; Sansita (the original brand face) for the wordmark and the landing page's headings.
 - **Layout.** Content sits on the page and is grouped by spacing and headings. Secondary summaries share one tinted panel instead of each getting its own card.
 - **Charts.** One series color per theme (`#3B8BDB` / `#4893E0`), checked for contrast against the page, with a data-table alternative under every chart.
 - **Theme.** A small script in `<head>` applies the saved theme before the first paint, so there's no flash.
 
 ## Tech stack
 
-- **Next.js 16** (App Router, React 19, Server Components and Server Actions) with **TypeScript**
-- **Cache Components / Partial Prerendering**: each page's static frame is prerendered and personal data streams in at request time. Personal data is never cached on the server.
-- **SQLite via libsql** with **Drizzle ORM** and SQL migrations: a local file in development, a hosted libsql/Turso database in production.
-- **Tailwind CSS v4** with the brand palette (glacier blue, navy, lemon) and a light/dark theme switch.
-- **Zod** for validating every form on the server
-- Session-based authentication with no auth library: `scrypt` password hashing, 256-bit session tokens stored as SHA-256 hashes, and httpOnly cookies.
-- **Vitest** for unit and database tests; **Playwright** for end-to-end tests in Microsoft Edge.
+| Layer | Technology |
+|---|---|
+| Framework | **Next.js 16.4** (App Router, Server Components, Server Actions), **React 19.3**, **TypeScript 5.9** |
+| Rendering | Cache Components / Partial Prerendering: each page's static frame is prerendered and personal data streams in at request time. Personal data is never cached on the server. |
+| Database | **SQLite via libsql 0.18** (a local file in development, hosted libsql/Turso in production) with **Drizzle ORM 0.45** and SQL migrations |
+| Validation | **Zod 4** for every form, on the server |
+| Auth | Session-based, no auth library: `scrypt` password hashing, 256-bit session tokens stored as SHA-256 hashes, httpOnly cookies, rate-limited forms |
+| Styling | **Tailwind CSS 4** with a three-layer token system (primitives, semantic, component) and light/dark themes; **lucide-react** icons |
+| Email | **Nodemailer** over SMTP (password resets) |
+| Testing | **Vitest 5** for unit and database tests; **Playwright 1.65** for end-to-end tests in Microsoft Edge |
+| Deployment | Any Node.js host; a **Render** Blueprint is included ([`render.yaml`](render.yaml)) |
+| Media tooling | Product clips recorded with Playwright and encoded in the browser with WebCodecs through **mediabunny** |
+
+## Landing page
+
+The home page tells the story of one day with the app:
+
+1. **Hero:** a topographic map (real contour lines, traced from a generated terrain) lies behind the headline and covers the spot where the product clip sits. As soon as the page starts to scroll, four of its contour lines morph into the dashboard's outline (the frame, side panel, sidebar, and a gold schedule block), then the clip fades in over them and starts playing; at the very top it reverses. The clip can't be clicked or focused until it has faded in.
+2. **A day, morning to night:** six moments from 7:30 AM to 10 PM, each a card tinted like the sky at that hour, hung from an arc.
+3. **Feature explorer:** a tab for each part of the app, with what it's for beside a clip that zooms in on the action.
+4. **How it connects:** one evening run followed from the planner to the calendar, the fitness log, and that night's journal.
+5. **FAQ**, a contact form behind a disclosure, and a closing call to action under a sunrise.
+
+Behind the whole page sits one large sky body: at the top it's a crescent moon low on the right, and as the page scrolls it rises, waxes, fades at dawn, and brightens into a full gold sun with rays. Each full-width section shows it through a clipped window of its own, so it stays under text and cards even on solid backgrounds, in faint tints chosen to keep text contrast on light and navy sections alike.
+
+Visitors who prefer reduced motion get a complete, still page: the clip is simply there, the sun stays put, and clips never autoplay.
 
 ## Getting started
 
@@ -79,7 +171,15 @@ The database lives in `data/planner.db` (ignored by git). Delete the file to sta
 
 To review every page visually, run `SCREENSHOTS=1 npx playwright test screenshots` (images go to `test-results/screens/`).
 
-The landing page uses real screenshots of the app in `public/screenshots/`. To refresh them after a design change, build, start a production server against a seeded database on port 3200, and run `npm run screenshots` (the steps are at the top of [`scripts/capture-screenshots.mjs`](scripts/capture-screenshots.mjs)). Then rebuild, because Next.js only serves files that were in `public/` at build time.
+The landing page plays short clips of the real app in use (`public/demos/`, light and dark, each with a poster frame). They are recorded by a script that drives the app with a visible cursor, so they can be refreshed after any design change:
+
+```bash
+npm run build
+npm run demos              # every clip; or e.g. `npm run demos -- tasks mood`
+npm run build              # Next.js only serves files that were in public/ at build time
+```
+
+[`scripts/record-demos.mjs`](scripts/record-demos.mjs) starts its own production server on port 3200 against a throwaway database, reseeds the demo account before each clip, and encodes H.264 MP4 with the browser's built-in encoder (no ffmpeg needed). It needs Microsoft Edge. Each clip's steps are listed at the top of the script.
 
 ## Configuration
 
@@ -98,20 +198,21 @@ Copy [`.env.example`](.env.example) to `.env.local`. Everything has a developmen
 ```
 src/
   app/
-    (marketing)/        Landing page and contact form
+    (marketing)/        Landing page: hero, day timeline, feature explorer, FAQ, contact form
     (auth)/             Sign up, log in, forgot / reset password
     (app)/              Signed-in app: dashboard, planner, calendar, tasks,
                         journal, mood, fitness, settings (each with its own actions.ts)
     api/                JSON export and reminders
   components/           UI building blocks, charts, app shell
-  lib/                  Pure logic: dates, calendar layout, streaks, units, schemas
+  lib/                  Pure logic: dates, calendar layout, streaks, units, schemas, demo camera
   server/
     auth/               Password hashing, sessions, current user
     data/               Data access layer (every query is scoped to the signed-in user)
     db/                 Drizzle schema and client
   proxy.ts              Redirects signed-out visitors away from app pages
 drizzle/                SQL migrations
-scripts/                migrate, seed, and the Vitest launcher
+public/demos/           Product clips (MP4) and their poster frames (WebP), light and dark
+scripts/                migrate, seed, record-demos (the product clips), and the Vitest launcher
 tests/                  Vitest unit and database tests
 e2e/                    Playwright end-to-end tests
 legacy/                 The original static site, unchanged

@@ -21,7 +21,7 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed": "tsx --conditions=react-server scripts/seed.ts",
     "db:studio": "drizzle-kit studio",
-    "screenshots": "node scripts/capture-screenshots.mjs"
+    "demos": "node scripts/record-demos.mjs"
   },
   "dependencies": {
     "@libsql/client": "0.18.0",
@@ -44,6 +44,7 @@
     "drizzle-kit": "0.31.11",
     "eslint": "9.39.5",
     "eslint-config-next": "16.4.6",
+    "mediabunny": "1.66.0",
     "tailwindcss": "4.3.3",
     "tsx": "4.23.15",
     "typescript": "5.9.3",

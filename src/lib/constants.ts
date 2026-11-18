@@ -8,7 +8,8 @@ import { daysBetween } from "./dates";
 export const TONES = [
   { value: "glacier", label: "Glacier blue" },
   { value: "navy", label: "Navy" },
-  { value: "lemon", label: "Lemon" },
+  // Stored as "lemon" from before the brand moved to gold; shown as Gold.
+  { value: "lemon", label: "Gold" },
   { value: "slate", label: "Slate" },
 ] as const;
 

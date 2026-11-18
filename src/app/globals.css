@@ -8,10 +8,14 @@
  *                    per theme. Components and Tailwind utilities use these.
  *   3. Component   — tokens owned by one pattern (focus ring, tones, charts).
  *
- * Brand: glacier blue #62A7EA (primary), navy #0C1B48 (secondary), lemon #F2EA1E (accent).
- * Contrast notes: navy on glacier 6.5:1 (primary buttons); glacier-800 on white
- * 6.0:1 (links); glacier itself is too light for text on white (2.55:1).
- * Lemon is a highlight only and never used as text on white.
+ * Brand: glacier blue #62A7EA (primary), navy #0C1B48 (secondary), gold #D4A017 (accent).
+ * Contrast notes (checked with scripts in the redesign notes):
+ *   navy on glacier 6.5:1 (primary buttons); glacier-800 on white 6.0:1 (links);
+ *   glacier itself is too light for text on white (2.55:1).
+ *   navy on gold-500 ≈7:1 (badges, numbered circles); gold-500 on white is only
+ *   ≈2.4:1, so it is never text or a meaningful icon on light backgrounds;
+ *   gold-700 on white ≈5.3:1 (small accent text and icons); navy on gold-100
+ *   ≈15:1 (highlighted surfaces); gold-500 on navy ≈7:1 (accent text in dark mode).
  *
  * The theme is data-theme on <html>, set before paint by src/lib/theme-script.ts.
  */
@@ -50,10 +54,11 @@
   --frost-300: #a8b5d1;
   --frost-400: #8e9cbd;
 
-  --lemon-100: #fbf8c9;
-  --lemon-500: #f2ea1e;
-  --lemon-600: #e3d80c;
-  --lemon-950: #3a3f2a;
+  /* A warm gold replaces the original lemon (#F2EA1E). */
+  --gold-100: #fff3cc;
+  --gold-500: #d4a017;
+  --gold-700: #8a6500;
+  --gold-950: #3a2e0a;
 
   --slate-500: #8590a6;
 
@@ -90,9 +95,10 @@
   --secondary-hover: var(--navy-800);
   --secondary-fg: var(--mist-0);
 
-  --accent: var(--lemon-500);
-  --accent-soft: var(--lemon-100);
+  --accent: var(--gold-500); /* fills and decoration; navy text on top */
+  --accent-soft: var(--gold-100); /* highlighted surfaces; navy text on top */
   --accent-fg: var(--navy-900);
+  --accent-ink: var(--gold-700); /* small accent text and icons on light surfaces */
 
   --danger: var(--red-700);
   --danger-soft: var(--red-50);
@@ -106,7 +112,7 @@
   --chart-1: var(--glacier-700); /* validated against --surface: lightness, chroma, 3:1 */
   --tone-glacier: var(--glacier-500);
   --tone-navy: var(--navy-900);
-  --tone-lemon: var(--lemon-600);
+  --tone-lemon: var(--gold-500);
   --tone-slate: var(--slate-500);
   --tone-on-glacier: var(--navy-900);
   --tone-on-navy: var(--mist-0);
@@ -115,6 +121,34 @@
   --elev-card: 0 1px 2px rgb(12 27 72 / 0.05), 0 1px 1px rgb(12 27 72 / 0.03);
   --elev-pop: 0 12px 32px rgb(12 27 72 / 0.14), 0 2px 6px rgb(12 27 72 / 0.08);
   --scrim: rgb(8 18 47 / 0.5);
+
+  /* Landing page: color blocks, and the sky over a day (dawn → night). */
+  --ink: var(--navy-900); /* text on light blocks, in either theme */
+  --paper: var(--mist-0); /* text on dark blocks, in either theme */
+  --stage: var(--glacier-100);
+  --block-night: var(--navy-900);
+  --sky-dawn: var(--gold-100);
+  --sky-morning: var(--mist-0);
+  --sky-noon: var(--glacier-300);
+  --sky-evening: var(--glacier-500);
+  --sky-dusk: var(--navy-700);
+  --sky-night: var(--navy-900);
+  --line-on-night: var(--glacier-300);
+  --grid-line: color-mix(in srgb, var(--navy-900) 3.5%, transparent);
+  /* The hero's topographic map (line color and strength). */
+  --topo-ink: var(--glacier-800);
+  --topo-alpha: 0.15;
+  /* The sky behind the landing page (SkyWindow): faint tints, so text over it keeps its contrast... */
+  --sky-moon-ink: var(--glacier-400);
+  --sky-moon-alpha: 0.3;
+  --sky-sun-alpha: 0.32;
+  /* ...and the tints for navy surfaces, in either theme. */
+  --sky-dark-moon-ink: var(--glacier-300);
+  --sky-dark-moon-alpha: 0.18;
+  --sky-dark-sun-alpha: 0.42; /* weaker turns olive over navy; light text over it still clears 4.5:1 */
+  /* The closing band: a sky above a horizon, the ground the same navy as the footer. */
+  --dusk-sky: var(--navy-850);
+  --dusk-ground: var(--navy-900);
 
   color-scheme: light;
 }
@@ -141,9 +175,10 @@
   --secondary-hover: var(--mist-0);
   --secondary-fg: var(--navy-900);
 
-  --accent: var(--lemon-500);
-  --accent-soft: var(--lemon-950);
+  --accent: var(--gold-500);
+  --accent-soft: var(--gold-950);
   --accent-fg: var(--navy-900);
+  --accent-ink: var(--gold-500); /* on navy, gold itself reads clearly */
 
   --danger: var(--red-300);
   --danger-soft: var(--red-950);
@@ -157,7 +192,7 @@
   --chart-1: var(--glacier-650); /* validated against the navy surface */
   --tone-glacier: var(--glacier-500);
   --tone-navy: var(--navy-400);
-  --tone-lemon: var(--lemon-500);
+  --tone-lemon: var(--gold-500);
   --tone-slate: var(--slate-500);
   --tone-on-glacier: var(--navy-900);
   --tone-on-navy: var(--navy-900);
@@ -166,6 +201,20 @@
   --elev-card: 0 0 0 1px rgb(255 255 255 / 0.04);
   --elev-pop: 0 16px 40px rgb(0 0 0 / 0.45);
   --scrim: rgb(3 8 24 / 0.6);
+
+  /* Landing page: the sky keeps its colors; only blocks that would vanish into navy change. */
+  --stage: var(--navy-850);
+  --block-night: var(--glacier-900);
+  --sky-morning: var(--frost-100);
+  --sky-night: var(--navy-950);
+  --grid-line: color-mix(in srgb, var(--frost-100) 3%, transparent);
+  --topo-ink: var(--glacier-300);
+  --topo-alpha: 0.12;
+  --sky-moon-ink: var(--sky-dark-moon-ink);
+  --sky-moon-alpha: var(--sky-dark-moon-alpha);
+  --sky-sun-alpha: var(--sky-dark-sun-alpha);
+  --dusk-sky: var(--navy-800);
+  --dusk-ground: var(--navy-850);
 
   color-scheme: dark;
 }
@@ -187,6 +236,20 @@
     --sidebar: var(--navy-950);
     --sidebar-active: var(--glacier-900);
     --chart-1: var(--glacier-650);
+    --stage: var(--navy-850);
+    --block-night: var(--glacier-900);
+    --sky-morning: var(--frost-100);
+    --sky-night: var(--navy-950);
+    --grid-line: color-mix(in srgb, var(--frost-100) 3%, transparent);
+    --topo-ink: var(--glacier-300);
+    --topo-alpha: 0.12;
+    --sky-moon-ink: var(--sky-dark-moon-ink);
+    --sky-moon-alpha: var(--sky-dark-moon-alpha);
+    --sky-sun-alpha: var(--sky-dark-sun-alpha);
+    --dusk-sky: var(--navy-800);
+    --dusk-ground: var(--navy-850);
+    --accent-soft: var(--gold-950);
+    --accent-ink: var(--gold-500);
     color-scheme: dark;
   }
 }
@@ -215,6 +278,9 @@
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-accent-fg: var(--accent-fg);
+  --color-accent-ink: var(--accent-ink);
+  --color-dusk-sky: var(--dusk-sky);
+  --color-dusk-ground: var(--dusk-ground);
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
   --color-success: var(--success);
@@ -222,9 +288,19 @@
   --color-sidebar: var(--sidebar);
   --color-sidebar-active: var(--sidebar-active);
   --color-chart-1: var(--chart-1);
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
+  --color-stage: var(--stage);
+  --color-block-night: var(--block-night);
+  --color-sky-dawn: var(--sky-dawn);
+  --color-sky-morning: var(--sky-morning);
+  --color-sky-noon: var(--sky-noon);
+  --color-sky-evening: var(--sky-evening);
+  --color-sky-dusk: var(--sky-dusk);
+  --color-sky-night: var(--sky-night);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  /* Sansita is kept for the wordmark only. */
+  /* Sansita: the wordmark and the landing page's display headings. The app itself uses Inter only. */
   --font-brand: var(--font-sansita), ui-serif, Georgia, serif;
 
   --shadow-card: var(--elev-card);
@@ -254,11 +330,17 @@
   /* The landing page's single load sequence: copy first, then the product. */
   --animate-hero-in: hero-in 700ms var(--ease-arrive) both;
   --animate-media-in: media-in 900ms var(--ease-arrive) both;
+  /* Swapping one clip or caption for the next in the product tour. */
+  --animate-fade-in: fade-in 420ms var(--ease-arrive) both;
+  /* A small overshoot for things that pop into place (landing page only). */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+    /* Keep anchors and keyboard focus clear of sticky headers. */
+    scroll-padding-top: 5rem;
   }
 
   body {
@@ -419,5 +501,413 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/*
+ * Scroll-linked motion on the landing page, all in CSS scroll timelines: no
+ * scroll listeners, no pinning, native scrolling untouched. The plain styles
+ * are the finished layout, so with no timeline support, a failed animation, or
+ * prefers-reduced-motion, the page is complete and still. Content is never
+ * hidden while it waits: text and cards only move, or fade from a readable
+ * minimum. Only decoration (the timeline's line, the sun) starts out of sight.
+ *
+ *   .drift         gentle parallax; set --drift (half the total travel)
+ *   .grid-paper    planner-paper grid on a layer that drifts slowly with the page
+ *   .arc-reveal, .marker-in   the day timeline's line and time markers
+ *   .lift-in       the walkthrough's interface cards (share one timeline: --walk)
+ *   .sky-art       the moon that becomes the sun, behind the whole page (below)
+ *   .header-elevate
+ */
+/*
+ * Hero: a topographic map lies behind the headline and buttons and covers the
+ * spot where the product preview sits. As soon as the page starts to scroll,
+ * four of its contour lines morph into the dashboard's outline and the preview
+ * fades in over them; back at the very top it fades out and the lines settle
+ * back into the map. HeroDemo draws the map, runs the morph, and sets
+ * data-hero="topo" | "framed". The morphing lines get --k (0 → 1) as they go:
+ * they darken and thicken, and the schedule block's line turns gold.
+ *
+ * Reduced motion and no JavaScript: the preview is simply there.
+ */
+.topo {
+  color: var(--topo-ink);
+  /* Fade out before the hero ends, so the map never stops at a hard edge. */
+  mask-image: linear-gradient(to bottom, #000 72%, transparent);
+  animation: topo-in 900ms var(--ease-arrive) both;
+}
+.topo path {
+  --a0: var(--topo-alpha);
+  --w0: 1px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linejoin: round;
+  stroke-opacity: var(--a0);
+  stroke-width: var(--w0);
+}
+.topo path.index {
+  --a0: calc(var(--topo-alpha) * 1.8);
+  --w0: 1.5px;
+}
+.topo-morph path {
+  stroke-opacity: calc(var(--a0) + (0.6 - var(--a0)) * var(--k, 0));
+  stroke-width: calc(var(--w0) + (1.75px - var(--w0)) * var(--k, 0));
+}
+.topo-morph path.gold {
+  stroke: color-mix(in oklab, currentColor, var(--accent) calc(var(--k, 0) * 100%));
+}
+/* Once the preview has faded in over its outline, the outline goes too. */
+[data-hero="framed"] .topo-morph {
+  opacity: 0;
+  transition: opacity 300ms linear 400ms;
+}
+/* 300ms: FADE_IN_MS in HeroDemo waits this long before the preview can be used. */
+.hero-demo,
+.hero-notes {
+  transition: opacity 300ms var(--ease-arrive);
+}
+.hero-notes {
+  transition-delay: 80ms;
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-hero="topo"] .hero-demo,
+  [data-hero="topo"] .hero-notes {
+    opacity: 0;
+    transition-duration: 150ms;
+    transition-delay: 0ms;
+  }
+}
+
+@keyframes topo-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/*
+ * Planner-paper grid lines, drawn on a layer that can drift without repainting.
+ * Give the element `relative` or `absolute`. The layer overhangs by three
+ * 48px cells, so a band anchored at its bottom (--grid-anchor: bottom) and the
+ * section below it anchored at the top keep their lines 48px apart across the seam.
+ */
+.grid-paper {
+  isolation: isolate;
+  /* clip, not hidden: a hidden box can be scrolled by focus or anchors, which would shift the grid. */
+  overflow: clip;
+}
+.grid-paper::before {
+  content: "";
+  position: absolute;
+  inset: -144px 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center var(--grid-anchor, top);
+  pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .drift {
+      animation: drift linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+    /* Every grid layer follows the same page-wide timeline, so lines stay continuous across sections. */
+    .grid-paper::before {
+      animation: grid-drift linear both;
+      animation-timeline: scroll(root);
+    }
+    .arc-reveal {
+      animation: arc-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 25% cover 45%;
+    }
+    .marker-in,
+    .dot-in {
+      animation: marker-in var(--ease-arrive) both;
+      animation-timeline: view();
+      animation-range: entry calc(20% + var(--i, 0) * 6%) entry calc(60% + var(--i, 0) * 6%);
+    }
+    .dot-in {
+      animation-name: dot-in;
+    }
+    .lift-in {
+      animation: lift-in var(--ease-arrive) both;
+      animation-timeline: --walk;
+      animation-range: entry 15% cover 35%;
+    }
+    .header-elevate {
+      animation: header-elevate linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 96px;
+    }
+  }
+}
+
+@keyframes drift {
+  from {
+    translate: 0 var(--drift, 8px);
+  }
+  to {
+    translate: 0 calc(var(--drift, 8px) * -1);
+  }
+}
+
+@keyframes grid-drift {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 -144px;
+  }
+}
+
+@keyframes arc-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes marker-in {
+  from {
+    opacity: 0.55;
+    translate: 0 6px;
+  }
+}
+
+@keyframes dot-in {
+  from {
+    opacity: 0.55;
+    scale: 0.3;
+  }
+}
+
+@keyframes lift-in {
+  from {
+    opacity: 0.8;
+    translate: 0 18px;
+  }
+}
+
+/*
+ * The sky: one moon that becomes the sun, behind the whole landing page. At
+ * the top it's a large crescent moon low on the right; as the page scrolls it
+ * rises, drifts inward, waxes, warms from moon blue to gold, and puts out
+ * rays: a full sun by the end. It's fixed to the screen and shown through a
+ * window in each full-width surface (SkyWindow: clipped to that surface and
+ * under its content), so it stays behind text and cards even on sections with
+ * solid backgrounds. It's drawn in faint tints (other ones on navy surfaces,
+ * .sky-on-dark), so text over it keeps its contrast.
+ *
+ * The plain styles are its last frame, the full sun: with reduced motion or no
+ * scroll timelines, that's all there is.
+ */
+.sky-window {
+  position: absolute;
+  inset: 0;
+  z-index: -2; /* under the surface's content, and under graph-paper lines (-1) */
+  /* clip-path, unlike overflow, also clips the fixed sky inside it to this surface. */
+  clip-path: inset(0);
+  pointer-events: none;
+}
+.sky-on-dark {
+  --sky-moon-ink: var(--sky-dark-moon-ink);
+  --sky-moon-alpha: var(--sky-dark-moon-alpha);
+  --sky-sun-alpha: var(--sky-dark-sun-alpha);
+}
+.sky-art {
+  /* About two-thirds of the screen's width or its full height, whichever is smaller. */
+  --s: clamp(30rem, min(62vw, 100vh), 64rem);
+  position: fixed;
+  /* The full sun: centered 40% down the screen, partly past its right edge. */
+  top: calc(40vh - var(--s) / 2);
+  right: calc(var(--s) * -0.3);
+  width: var(--s);
+  height: var(--s);
+  overflow: visible;
+}
+.sky-tint {
+  color: var(--accent); /* the disc, glow, and rays all use it */
+}
+.sky-disc {
+  fill: currentColor;
+  fill-opacity: var(--sky-sun-alpha);
+}
+.sky-outline {
+  fill: none;
+  stroke: var(--sky-moon-ink);
+  stroke-opacity: var(--sky-moon-alpha);
+  stroke-width: 0.6;
+  opacity: 0;
+}
+.sky-rays {
+  stroke: currentColor;
+  stroke-opacity: var(--sky-sun-alpha);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  transform-origin: 100px 100px;
+}
+.sky-shadow {
+  translate: 115px -20px;
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* One animation per element: the minifier turns a list of them into fixed 0s durations, which a scroll timeline can't stretch. */
+    .sky-art {
+      animation: sky-rise linear both;
+      animation-timeline: scroll(root);
+    }
+    .sky-tint {
+      animation: sky-warm linear both;
+      animation-timeline: scroll(root);
+    }
+    .sky-disc {
+      animation: sky-fill linear both;
+      animation-timeline: scroll(root);
+    }
+    .sky-shadow {
+      animation: sky-wax linear both;
+      animation-timeline: scroll(root);
+    }
+    .sky-glow {
+      animation: sky-glow linear both;
+      animation-timeline: scroll(root);
+    }
+    .sky-outline {
+      animation: sky-outline linear both;
+      animation-timeline: scroll(root);
+    }
+    .sky-rays {
+      animation: sky-rays linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+/* From low on the right (84% down the screen) up to 40%, drifting a little inward. */
+@keyframes sky-rise {
+  from {
+    translate: calc(var(--s) * 0.08) 44vh;
+  }
+}
+/* The moon's shadow slides off: crescent (lit on the side facing the page), half, gibbous, full by 80%. */
+@keyframes sky-wax {
+  0%,
+  8% {
+    translate: 0 0;
+  }
+  80%,
+  100% {
+    translate: 115px -20px;
+  }
+}
+/*
+ * Dawn: the moon fades into the light while its color turns, and the sun
+ * brightens in gold. (Turning blue into gold at full strength passes through
+ * a flat khaki; at its faintest, the in-between just reads as pale light.)
+ */
+@keyframes sky-warm {
+  0%,
+  35% {
+    color: var(--sky-moon-ink);
+  }
+  65%,
+  100% {
+    color: var(--accent);
+  }
+}
+@keyframes sky-fill {
+  0%,
+  25% {
+    fill-opacity: var(--sky-moon-alpha);
+  }
+  50% {
+    fill-opacity: calc(var(--sky-moon-alpha) * 0.35);
+  }
+  85%,
+  100% {
+    fill-opacity: var(--sky-sun-alpha);
+  }
+}
+/* A soft halo around the moon, fading at dawn, the sun's full glow by the end. */
+@keyframes sky-glow {
+  0% {
+    opacity: 0.5;
+  }
+  45% {
+    opacity: 0.25;
+  }
+}
+/* The rest of the moon's disc, faintly, while it's still a crescent. */
+@keyframes sky-outline {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  70%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes sky-rays {
+  0%,
+  62% {
+    opacity: 0;
+    rotate: -25deg;
+    scale: 0.85;
+  }
+}
+
+/*
+ * The hand-drawn gold underline under the hero's key phrase draws itself once,
+ * right after the headline arrives (give the path pathLength="1").
+ */
+.scribble {
+  stroke-dasharray: 1;
+  animation: draw-line 700ms var(--ease-arrive) 650ms both;
+}
+
+/* FAQ answers open smoothly where the browser supports animating to auto height. */
+.faq-item::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 280ms var(--ease-arrive),
+    content-visibility 280ms allow-discrete;
+}
+.faq-item[open]::details-content {
+  block-size: auto;
+}
+.faq-item {
+  interpolate-size: allow-keywords;
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes header-elevate {
+  to {
+    box-shadow: 0 1px 0 var(--line);
   }
 }

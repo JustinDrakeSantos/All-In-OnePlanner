@@ -1,159 +1,157 @@
-import { Suspense, type ReactNode } from "react";
+import { Suspense } from "react";
 import { ButtonLink } from "@/components/ui/button";
 import { AccountNotice } from "./account-notice";
-import { ContactForm } from "./contact-form";
-import { CalendarDemo } from "./demos/calendar-demo";
-import { FitnessDemo } from "./demos/fitness-demo";
-import { MoodDemo } from "./demos/mood-demo";
-import { TasksDemo } from "./demos/tasks-demo";
-import { ProductTour } from "./product-tour";
-import { Screenshot } from "./screenshot";
+import { Connected } from "./connected";
+import { DayTimeline } from "./day-timeline";
+import { Faq } from "./faq";
+import { HeroDemo } from "./hero-demo";
+import { ProductTour, type TourStop } from "./product-tour";
+import { SkyWindow } from "./sky";
 
-/** Each stop shows either a working demo with sample data or a screenshot of the real page. */
-const TOUR: { key: string; label: string; description: string; demo?: ReactNode; alt?: string }[] = [
+/*
+ * Page flow: hero with the product → a day, morning to night → each tool and
+ * what it's for → how the tools hand one plan along → questions → sign up.
+ *
+ * Clips are recorded from the real app with `npm run demos` (scripts/record-demos.mjs).
+ */
+const TOUR: TourStop[] = [
   {
     key: "tasks",
     label: "Tasks",
-    description: "Lists for school, work, and home, with priorities, due dates, repeating tasks, and a streak for every day you finish something.",
-    demo: <TasksDemo />,
+    heading: "Know what needs you today.",
+    body: "Overdue tasks, today's priorities, and upcoming deadlines, together in one list.",
+    points: ["Lists for school, work, and home", "Repeating tasks that come back on schedule", "A streak for every day you finish something"],
+    alt: "The task list: a new task is typed and added, then “Email internship coordinator” is checked off and a message offers Undo.",
   },
   {
     key: "calendar",
     label: "Calendar",
-    description: "Month, week, and day views. Click an empty slot to add an event. Overlapping events sit side by side.",
-    demo: <CalendarDemo />,
+    heading: "See the whole week at once.",
+    body: "Month, week, and day views, with the tasks that are due sitting beside your events.",
+    points: ["Click an empty slot to add an event", "Overlapping events sit side by side", "Reminders before things start"],
+    alt: "The calendar's week view: clicking a free afternoon opens a new event, which is named, given a place, and added.",
   },
   {
     key: "planner",
     label: "Daily Planner",
-    description: "Plan any day in one view: what carried over, what's due, what's on the calendar, and how you felt.",
-    alt: "The Daily Planner showing today's tasks, schedule, important tasks, upcoming events, and habits.",
+    heading: "Plan any day in one view.",
+    body: "What carried over, what's due, and what's on the calendar, on a single page.",
+    points: ["Unfinished tasks carry over by themselves", "Your schedule and the next seven days", "A place to reflect at the end of the day"],
+    alt: "The Daily Planner: a task is added to today's plan, an overdue task is checked off, and the view moves on to tomorrow.",
   },
   {
     key: "journal",
     label: "Journal",
-    description: "Write freely or start from today's prompt. Keep gratitude and reflection entries, tag them, and search them later.",
-    alt: "The journal with today's prompts and past entries grouped by month.",
+    heading: "Write a little, every night.",
+    body: "Start from one of today's prompts or a blank page. It only takes a few lines.",
+    points: ["Gratitude and reflection prompts", "Tags and search to find entries later", "Each entry shows that day's mood"],
+    alt: "The journal: one of today's prompts is picked, a short entry is written and tagged, and it's saved.",
   },
   {
     key: "mood",
     label: "Mood",
-    description: "A quick daily check-in for mood, energy, and emotions, with a trend line and gentle suggestions on harder days.",
-    demo: <MoodDemo />,
+    heading: "Notice how your days feel.",
+    body: "A quick check-in for mood, energy, and emotions, with a short note if you want one.",
+    points: ["A 30-day trend at a glance", "The weekdays that tend to go better", "An optional daily reminder to check in"],
+    alt: "The mood check-in: Great, an energy level, and two emotions are chosen with a short note, and the 30-day chart updates.",
   },
   {
     key: "fitness",
     label: "Fitness",
-    description: "Log workouts, meals, and water. Track weight, steps, and sleep, and check off your habits.",
-    demo: <FitnessDemo />,
+    heading: "Keep the habits that keep you going.",
+    body: "Log workouts, meals, and water, and check off the habits you're building.",
+    points: ["One-tap water with a daily goal", "Weight, steps, and sleep charts", "Weekly targets for every habit"],
+    alt: "Fitness: water is logged past the daily goal, steps and sleep are entered, and the weight, steps, and sleep charts open.",
   },
-];
-
-const PRIVACY = [
-  { title: "Only you can see your entries", body: "Every request is checked against your account on the server, not just hidden in the browser." },
-  { title: "Take your data with you", body: "Download everything you've entered as a file whenever you like." },
-  { title: "Leave in one step", body: "Deleting your account removes every entry in it." },
-  { title: "No ads or trackers", body: "No advertising or third-party analytics scripts, and fonts are served by the app itself." },
 ];
 
 export default function LandingPage() {
   return (
-    <>
+    /*
+      The whole page sits in front of one sky: a crescent moon low on the right that, as the page
+      scrolls, rises and becomes a full sun (SkyWindow). This window shows it wherever the page
+      background shows; sections with their own backgrounds have windows of their own.
+    */
+    <div className="relative isolate">
+      <SkyWindow id="page" />
+
       <Suspense fallback={null}>
         <AccountNotice />
       </Suspense>
 
-      {/* Hero */}
-      <section className="overflow-hidden">
-        <div className="mx-auto max-w-6xl px-4 pt-14 text-center sm:px-6 md:pt-20">
-          {/* One load sequence: headline, line, buttons, then the product. */}
-          <h1 className="mx-auto max-w-4xl animate-hero-in font-brand text-[2.6rem] leading-[1.02] tracking-tight text-fg sm:text-6xl md:text-[4.5rem]">
-            Your calendar, tasks, journal, and workouts on one page
-          </h1>
-          <p className="mx-auto mt-6 max-w-xl animate-hero-in text-lg text-muted [animation-delay:90ms]">
-            Plan the day, check things off, and look back on how it went, without switching between five apps.
-          </p>
-          <div className="mt-8 flex animate-hero-in flex-wrap justify-center gap-3 [animation-delay:180ms]">
-            <ButtonLink href="/signup" size="lg">
-              Create your planner
-            </ButtonLink>
-            <ButtonLink href="/login" size="lg" variant="ghost">
-              Log in
-            </ButtonLink>
-          </div>
-          <div className="relative mx-auto mt-14 max-w-[69rem] animate-media-in [animation-delay:240ms] md:mt-16">
-            <Screenshot
-              name="dashboard"
-              priority
-              alt="The All-In Planner dashboard: today's schedule and tasks on the left, with mood, habits, water, and weekly progress on the right."
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Product tour */}
-      <section id="tour" className="scroll-mt-16 py-24 md:py-32">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 className="mx-auto max-w-2xl text-center text-3xl font-semibold tracking-tight sm:text-4xl">
-            Six tools that share the same day
-          </h2>
-          <p className="mx-auto mt-3 mb-10 max-w-xl text-center text-muted">
-            A task due today shows up on the calendar, in your daily plan, and on the dashboard. Tasks, Calendar, Mood, and Fitness work right here with sample data.
-          </p>
-          <ProductTour
-            stops={TOUR.map((stop) => ({
-              key: stop.key,
-              label: stop.label,
-              description: stop.description,
-              media: stop.demo ?? <Screenshot name={stop.key} alt={stop.alt ?? ""} />,
-            }))}
-          />
-        </div>
-      </section>
-
-      {/* Privacy */}
-      <section id="privacy" className="scroll-mt-16 bg-surface-2 py-20 md:py-28">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 md:grid-cols-[1fr_1.4fr] md:gap-16">
-          <div>
-            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Your journal stays yours</h2>
-            <p className="mt-3 text-muted">
-              Moods, health notes, and journal entries are personal. Here is how the app treats them.
+      {/*
+        Hero: a topographic map lies behind this copy and covers the product preview; when
+        scrolling starts, some of its lines morph into the dashboard and the preview fades in (see HeroDemo).
+      */}
+      {/* overflow-x-clip: the tilted notes must never cause sideways scrolling. */}
+      <section className="relative overflow-x-clip">
+        {/* Without JavaScript there's no map and nothing to morph, so the preview is simply there. */}
+        <noscript>
+          <style>{`[data-hero="topo"] .hero-demo, [data-hero="topo"] .hero-notes { opacity: 1; }`}</style>
+        </noscript>
+        <div className="hero-copy relative z-20">
+          <div className="mx-auto max-w-6xl px-4 pt-10 text-center sm:px-6 md:pt-14">
+            {/* One load sequence: label, headline, line, buttons. */}
+            <p className="animate-hero-in text-sm font-semibold text-accent-ink">Your day, all in one place</p>
+            <h1 className="mx-auto mt-4 max-w-4xl animate-hero-in font-brand text-[2.6rem] leading-[1.03] tracking-tight text-fg [animation-delay:60ms] sm:text-6xl md:text-[4.5rem]">
+              A little more together.{" "}
+              <span className="relative isolate inline-block whitespace-nowrap">
+                Every day.
+                {/* A hand-drawn gold underline. */}
+                <svg aria-hidden className="absolute -bottom-[0.08em] left-[-2%] -z-10 h-[0.32em] w-[104%]" viewBox="0 0 200 20" preserveAspectRatio="none">
+                  <path className="scribble" pathLength={1} d="M4 13 C 40 6, 96 4, 136 8 S 186 15, 196 7" fill="none" stroke="var(--accent)" strokeWidth={7} strokeLinecap="round" />
+                </svg>
+              </span>
+            </h1>
+            <p className="mx-auto mt-5 max-w-2xl animate-hero-in text-lg text-muted [animation-delay:120ms] sm:text-xl">
+              Your calendar, tasks, journal, mood, and workouts on one page. Plan the day, check things off, and look back on how it went.
             </p>
+            <div className="mt-7 flex animate-hero-in flex-wrap justify-center gap-3 pb-2 [animation-delay:180ms]">
+              <ButtonLink href="/signup" size="lg">
+                Create your planner
+              </ButtonLink>
+              <ButtonLink href="/login" size="lg" variant="ghost">
+                Log in
+              </ButtonLink>
+            </div>
           </div>
-          <dl className="grid gap-x-10 gap-y-8 sm:grid-cols-2">
-            {PRIVACY.map((item) => (
-              <div key={item.title}>
-                <dt className="font-semibold">{item.title}</dt>
-                <dd className="mt-1 text-sm text-muted">{item.body}</dd>
-              </div>
-            ))}
-          </dl>
+        </div>
+        <HeroDemo />
+      </section>
+
+      <DayTimeline />
+
+      {/* Feature explorer */}
+      <section id="features" aria-labelledby="features-heading" className="scroll-mt-20 py-16 md:py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mb-8 max-w-2xl">
+            <h2 id="features-heading" className="font-brand text-4xl tracking-tight sm:text-5xl">
+              Pick a part of your day
+            </h2>
+            <p className="mt-3 text-lg text-muted">Each tool does one job well. Everything stays connected to your day.</p>
+          </div>
+          <ProductTour stops={TOUR} />
         </div>
       </section>
 
-      {/* Contact */}
-      <section id="contact" className="scroll-mt-16 py-20 md:py-28">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 md:grid-cols-[1fr_1.4fr] md:gap-16">
-          <div>
-            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Found a bug or have an idea?</h2>
-            <p className="mt-3 text-muted">Send a message and we&apos;ll reply by email.</p>
-          </div>
-          <ContactForm />
-        </div>
-      </section>
+      <Connected />
 
-      {/* Closing call to action */}
-      <section className="bg-secondary text-secondary-fg dark:bg-surface-2 dark:text-fg">
-        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-16 sm:px-6 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h2 className="font-brand text-3xl tracking-tight sm:text-4xl">Start with today</h2>
-            <p className="mt-2 opacity-80">Add a few tasks and an event. The rest fills in as you go.</p>
-          </div>
-          <ButtonLink href="/signup" size="lg">
+      <Faq />
+
+      {/* Closing call to action: the risen sun over a horizon. */}
+      {/* overflow-clip, not hidden: a hidden box can still be scrolled (say, by focusing its button), which would slide the horizon. */}
+      <section className="relative isolate overflow-clip bg-dusk-sky text-paper dark:text-fg">
+        <SkyWindow id="closing" onDark />
+        {/* The horizon: ground in front of the sky, the same navy as the footer below. */}
+        <div aria-hidden className="absolute inset-x-0 bottom-0 h-16 border-t border-accent/50 bg-dusk-ground" />
+        <div className="relative mx-auto max-w-6xl px-4 pt-16 pb-32 sm:px-6 md:pt-20 md:pb-36">
+          <h2 className="font-brand text-5xl tracking-tight sm:text-6xl">Start with today</h2>
+          <p className="mt-3 max-w-md text-lg opacity-85">Add a few tasks and an event. The rest fills in as you go.</p>
+          <ButtonLink href="/signup" size="lg" className="mt-7">
             Create your planner
           </ButtonLink>
         </div>
       </section>
-    </>
+    </div>
   );
 }

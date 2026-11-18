@@ -122,7 +122,8 @@ export function ProgressBar({
 export function Logo({ withWordmark = true, className }: { withWordmark?: boolean; className?: string }) {
   return (
     <span className={cn("inline-flex items-center gap-2 text-fg", className)}>
-      <Image src="/images/logo.png" alt="" width={22} height={33} priority className="h-8 w-auto dark:hue-rotate-180 dark:invert" />
+      {/* Tiny already; served as-is so it never depends on the image resizer. */}
+      <Image src="/images/logo.png" alt="" width={22} height={33} preload unoptimized className="h-8 w-auto dark:hue-rotate-180 dark:invert" />
       {withWordmark ? <span className="font-brand text-[1.2rem] leading-none tracking-tight">All-In Planner</span> : null}
     </span>
   );

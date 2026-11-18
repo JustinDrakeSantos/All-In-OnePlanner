@@ -319,38 +319,136 @@ test("contact form saves a message", async ({ page }) => {
   await expect(page.getByText("Thanks! Your message has been sent.")).toBeVisible();
 });
 
-test("landing: the live demos respond and reset", async ({ page }) => {
+test("landing: product clips play, and the tour switches and pauses them", async ({ page }) => {
+  const playing = (video: import("@playwright/test").Locator) =>
+    video.evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime > 0 && v.readyState >= 2);
+
   await page.goto("/");
-  const tour = page.locator("#tour");
+  // Before scrolling, the topographic map covers the preview, which holds still and can't be used...
+  const heroSection = page.locator("section").first();
+  const hero = heroSection.locator("video");
+  const preview = heroSection.locator(".hero-demo");
+  await expect(heroSection.locator("[data-hero]")).toHaveAttribute("data-hero", "topo");
+  await expect(heroSection.locator("svg.topo path").first()).toBeAttached();
+  await expect(preview).toHaveAttribute("data-settled", "false");
+  await expect(preview).toHaveAttribute("inert", ""); // no clicks or keyboard focus inside
+  // ...and once scrolling has started, the map's lines morph into the dashboard, it fades in, and it plays on its own.
+  await page.evaluate(() => window.scrollTo({ top: window.innerHeight * 0.6, behavior: "instant" }));
+  await expect(heroSection.locator("[data-hero]")).toHaveAttribute("data-hero", "framed");
+  await expect(preview).toHaveAttribute("data-settled", "true");
+  await expect(preview).not.toHaveAttribute("inert");
+  expect(await preview.evaluate((el) => getComputedStyle(el).opacity)).toBe("1");
+  await expect.poll(() => playing(hero), { timeout: 15_000 }).toBe(true);
 
-  await tour.getByRole("checkbox", { name: /^Water the plants/ }).check();
-  await expect(tour.getByText("Streak extended for today.")).toBeVisible();
-  await expect(tour.getByText("5 days")).toBeVisible();
-  await tour.getByRole("button", { name: "Reset" }).click();
-  await expect(tour.getByText("4 days")).toBeVisible();
+  const tour = page.locator("#features");
+  await tour.locator("video").scrollIntoViewIfNeeded();
+  await expect(tour.getByRole("tab", { name: "Tasks" })).toHaveAttribute("aria-selected", "true");
+  await expect.poll(() => playing(tour.locator("video")), { timeout: 15_000 }).toBe(true);
+  await expect(tour.locator("video")).toHaveAttribute("src", /\/demos\/tasks-(light|dark)\.mp4$/);
 
-  await tour.getByRole("tab", { name: "Calendar" }).click();
-  await tour.getByRole("button", { name: "Add an event on Mon at 1:00 PM" }).click();
-  await expect(tour.getByRole("button", { name: "New event, Mon at 1:00 PM. Remove" })).toBeVisible();
-  await tour.getByRole("button", { name: "New event, Mon at 1:00 PM. Remove" }).click();
-  await expect(tour.getByRole("button", { name: /^New event/ })).toHaveCount(0);
-
+  // Picking a tab swaps the clip and keeps it there.
   await tour.getByRole("tab", { name: "Mood" }).click();
-  await tour.getByRole("button", { name: "Awful" }).click();
-  await expect(tour.getByRole("button", { name: "Awful" })).toHaveAttribute("aria-pressed", "true");
-  await expect(tour.getByText("A few things that might help")).toBeVisible();
+  await expect(tour.getByRole("tab", { name: "Mood" })).toHaveAttribute("aria-selected", "true");
+  await expect(tour.getByRole("img", { name: /mood check-in/i })).toBeVisible();
+  await tour.locator("video").scrollIntoViewIfNeeded();
+  await expect(tour.locator("video")).toHaveAttribute("src", /\/demos\/mood-(light|dark)\.mp4$/);
+  await expect.poll(() => playing(tour.locator("video")), { timeout: 15_000 }).toBe(true);
 
-  await tour.getByRole("tab", { name: "Fitness" }).click();
-  await tour.getByRole("button", { name: "+16 oz" }).click();
-  await tour.getByRole("button", { name: "+16 oz" }).click();
-  await tour.getByRole("button", { name: "+16 oz" }).click();
-  await expect(tour.getByText("Goal reached")).toBeVisible();
-  await tour.getByRole("button", { name: "Stretch, today: not done" }).click();
-  await expect(tour.getByText("7-day streak")).toBeVisible();
+  // Every clip can be paused.
+  await tour.getByRole("button", { name: "Pause Mood demo" }).click();
+  await expect(tour.getByRole("button", { name: "Play Mood demo" })).toBeVisible();
+  expect(await tour.locator("video").evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
+});
 
-  // Stops without a demo still show the screenshot.
-  await tour.getByRole("tab", { name: "Journal" }).click();
-  await expect(tour.getByRole("img", { name: /journal/i }).first()).toBeVisible();
+test("landing: the FAQ opens and closes", async ({ page }) => {
+  await page.goto("/#faq");
+  const faq = page.locator("#faq");
+  const question = faq.getByText("How much does it cost?");
+  const answer = faq.getByText(/free to use, with no paid plans/);
+  await expect(answer).toBeHidden();
+  await question.click();
+  await expect(answer).toBeVisible();
+  await question.click();
+  await expect(answer).toBeHidden();
+});
+
+test("landing: with reduced motion, the layout is still and clips wait for a click", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const hero = page.locator("section").first();
+  await expect(hero.getByRole("img", { name: /dashboard in use/i })).toBeVisible();
+  // No reveal: the preview is there and usable straight away.
+  await expect(hero.locator("[data-settled]")).toHaveAttribute("data-settled", "true");
+  expect(await hero.locator(".hero-demo").evaluate((el) => getComputedStyle(el).opacity)).toBe("1");
+  // The sky behind the page is simply the full sun, from the top, and doesn't move.
+  const sun = page.locator(".sky-window .sky-art").first();
+  expect(await sun.evaluate((el) => Number(getComputedStyle(el.querySelector(".sky-rays")!).opacity))).toBe(1);
+  const before = await sun.boundingBox();
+  await page.evaluate(() => window.scrollTo({ top: 2000, behavior: "instant" }));
+  expect(await sun.boundingBox()).toEqual(before);
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  await page.waitForTimeout(1000);
+  expect(await hero.locator("video").getAttribute("src")).toBeNull();
+  await hero.getByRole("button", { name: "Play product demo" }).click();
+  await expect(hero.getByRole("button", { name: "Pause product demo" })).toBeVisible({ timeout: 15_000 });
+});
+
+test("landing: a moon behind the page rises into a full sun by the end", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  // One window onto the sky per full-width surface, each showing it in the same place.
+  const look = () =>
+    page.evaluate(() =>
+      [...document.querySelectorAll(".sky-window .sky-art")].map((art) => {
+        const r = art.getBoundingClientRect();
+        return {
+          x: Math.round(r.left),
+          y: Math.round(r.top),
+          size: Math.round(r.width),
+          rays: Number(getComputedStyle(art.querySelector(".sky-rays")!).opacity),
+          color: getComputedStyle(art.querySelector(".sky-tint")!).color,
+        };
+      }),
+    );
+  const start = await look();
+  expect(start.length).toBeGreaterThanOrEqual(5);
+  const placed = ({ x, y, size, rays }: (typeof start)[number]) => ({ x, y, size, rays });
+  start.forEach((sky) => expect(placed(sky)).toEqual(placed(start[0])));
+  expect(start[0].rays).toBe(0); // a moon: no rays yet
+  expect(start[0].size).toBeGreaterThan(600); // a background, not an icon
+
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
+  await expect.poll(async () => (await look())[0].rays).toBeGreaterThan(0.99);
+  const end = await look();
+  end.forEach((sky) => expect(placed(sky)).toEqual(placed(end[0])));
+  expect(end[0].y).toBeLessThan(start[0].y - 200); // it rose
+  expect(end[0].color).not.toBe(start[0].color); // moon blue to gold
+
+  // It's behind the page: under each surface's content, and never in the way of a click.
+  const sky = page.locator(".sky-window").first();
+  expect(await sky.evaluate((el) => [getComputedStyle(el).zIndex, getComputedStyle(el).pointerEvents])).toEqual(["-2", "none"]);
+  await page.getByRole("link", { name: "Create your planner" }).last().click();
+  await expect(page).toHaveURL(/\/signup$/);
+});
+
+test("landing: focusing the closing button doesn't shift the horizon artwork", async ({ page }) => {
+  await page.goto("/");
+  const closing = page.locator("section").last();
+  await closing.getByRole("link", { name: "Create your planner" }).focus();
+  await page.waitForTimeout(500);
+  // The ground stays on the band's bottom edge (the band can't be scrolled internally).
+  const gap = await closing.evaluate((section) => section.getBoundingClientRect().bottom - section.children[1].getBoundingClientRect().bottom);
+  expect(Math.abs(gap)).toBeLessThan(1);
+});
+
+test("landing: the contact form opens from its disclosure and from a #contact link", async ({ page }) => {
+  await page.goto("/");
+  const contact = page.locator("#contact");
+  await expect(contact.getByLabel("Message")).toBeHidden();
+  await contact.getByText("Send us a message").click();
+  await expect(contact.getByLabel("Message")).toBeVisible();
+  await page.goto("/#contact");
+  await expect(page.locator("#contact").getByLabel("Message")).toBeVisible();
 });
 
 test("theme: dark mode applies before paint and survives a reload", async ({ page }) => {
