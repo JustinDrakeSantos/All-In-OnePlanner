@@ -103,7 +103,9 @@ const CLIPS = {
     url: "/journal",
     start: { x: 900, y: 520 },
     async play(d) {
-      await d.click(d.page.getByRole("link", { name: /^Write about: Who made your day better/ }), { after: 500 });
+      // Today's prompts change every day; the entry below is about gratitude, so take that one
+      // (the prompts are listed Entry, Gratitude, Reflection).
+      await d.click(d.page.getByRole("link", { name: /^Write about:/ }).nth(1), { after: 500 });
       const body = d.page.getByLabel("Entry", { exact: true });
       await body.waitFor();
       await d.click(d.page.getByLabel("Title", { exact: true }), { at: "start", after: 100 });
@@ -219,7 +221,18 @@ function run(args) {
   if (result.status !== 0) throw new Error(`Failed: node ${args.join(" ")}`);
 }
 const tsx = path.resolve("node_modules/tsx/dist/cli.mjs");
-const reseed = () => run([tsx, "--conditions=react-server", "scripts/seed.ts"]);
+// The server may still be writing from the previous clip, so a reseed can briefly hit a locked
+// database; try a few times before giving up.
+const reseed = () => {
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return run([tsx, "--conditions=react-server", "scripts/seed.ts"]);
+    } catch (error) {
+      if (attempt === 3) throw error;
+      spawnSync(process.execPath, ["-e", "setTimeout(() => {}, 1500)"]);
+    }
+  }
+};
 
 async function startServer() {
   const server = spawn(process.execPath, [path.resolve("node_modules/next/dist/bin/next"), "start", "-p", String(PORT)], { env, stdio: "ignore" });
