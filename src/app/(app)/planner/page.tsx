@@ -161,7 +161,7 @@ async function Planner({ searchParams }: { searchParams: PageProps<"/planner">["
           </Card>
         </div>
 
-        <aside aria-label="At a glance" className="divide-y divide-line rounded-2xl bg-surface-2 px-5">
+        <aside aria-label="At a glance" className="glass-panel divide-y divide-glass-divider rounded-2xl px-5">
           <section className="py-5">
             <h2 className="mb-1 text-panel font-semibold">Important</h2>
             {important.length === 0 ? (

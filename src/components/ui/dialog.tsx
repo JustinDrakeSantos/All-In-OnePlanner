@@ -42,7 +42,7 @@ export function Dialog({
         if (event.target === ref.current) onClose();
       }}
       className={cn(
-        "m-auto w-[min(32rem,calc(100vw-2rem))] max-h-[calc(100dvh-2rem)] rounded-2xl bg-surface p-0 text-fg shadow-pop open:animate-rise",
+        "m-auto w-[min(32rem,calc(100vw-2rem))] max-h-[calc(100dvh-2rem)] dialog-surface rounded-2xl p-0 text-fg open:animate-rise",
         className,
       )}
     >

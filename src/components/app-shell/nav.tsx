@@ -47,11 +47,11 @@ function NavLink({
       onClick={onNavigate}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex items-center gap-3 rounded-lg px-3 py-2 text-panel transition-colors",
-        active ? "bg-sidebar-active font-semibold text-fg" : "text-muted hover:bg-sidebar-active/60 hover:text-fg",
+        "nav-link flex items-center gap-3 rounded-lg px-3 py-2 text-panel transition-colors",
+        active ? "bg-nav-active font-semibold text-nav-active-fg" : "text-muted hover:bg-nav-hover hover:text-fg",
       )}
     >
-      <Icon className="size-[18px] shrink-0" strokeWidth={active ? 2.25 : 2} aria-hidden />
+      <Icon className={cn("size-[18px] shrink-0", active && "text-nav-active-icon")} strokeWidth={active ? 2.25 : 2} aria-hidden />
       <span className="flex-1">{label}</span>
       <PendingHint />
     </Link>

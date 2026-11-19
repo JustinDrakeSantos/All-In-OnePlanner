@@ -24,7 +24,7 @@ export async function AccountMenu() {
       <form action={logoutAction}>
         <button
           type="submit"
-          className="grid size-9 place-items-center rounded-lg text-muted transition-colors hover:bg-sidebar-active hover:text-fg"
+          className="grid size-9 place-items-center rounded-lg text-muted transition-colors hover:bg-nav-hover hover:text-fg"
           aria-label="Log out"
           title="Log out"
         >

@@ -48,8 +48,8 @@ export function Faq() {
     <section id="faq" aria-labelledby="faq-heading" className="scroll-mt-20 py-16 md:py-20">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] lg:gap-16">
         <div>
-          <h2 id="faq-heading" className="font-brand text-4xl tracking-tight sm:text-5xl">
-            Questions, answered
+          <h2 id="faq-heading" className="font-display font-semibold tracking-[-0.025em] text-4xl sm:text-5xl">
+            Questions, <em className="text-primary-ink">answered</em>
           </h2>
           <p className="mt-3 text-lg text-muted">The things people ask before they sign up.</p>
           <ContactDisclosure>
@@ -57,12 +57,12 @@ export function Faq() {
           </ContactDisclosure>
         </div>
 
-        <div className="divide-y divide-line">
+        <div className="glass-card divide-y divide-line self-start rounded-3xl px-6 sm:px-7">
           {QUESTIONS.map((item) => (
             <details key={item.q} className="faq-item group">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-left text-lg font-semibold">
                 {item.q}
-                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-surface-2 transition-[rotate,background-color] duration-300 ease-spring group-open:rotate-45 group-open:bg-accent group-open:text-accent-fg">
+                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-fg/[0.06] transition-[rotate,background-color] duration-300 ease-spring group-open:rotate-45 group-open:bg-accent group-open:text-accent-fg">
                   <Plus className="size-4" aria-hidden />
                 </span>
               </summary>

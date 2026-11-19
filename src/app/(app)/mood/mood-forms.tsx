@@ -9,7 +9,7 @@ import { initialFormState } from "@/lib/forms";
 import { saveMoodAction, saveMoodReminderAction } from "./actions";
 
 const chip =
-  "block rounded-full bg-surface-2 px-3 py-1.5 text-sm transition-colors hover:bg-surface-3 peer-checked:bg-primary-soft peer-checked:font-medium peer-checked:ring-1 peer-checked:ring-primary peer-focus-visible:ring-2 peer-focus-visible:ring-primary-ink";
+  "block rounded-full bg-surface-2 px-3 py-1.5 text-sm transition-colors hover:bg-surface-3 peer-checked:bg-primary-soft peer-checked:font-medium peer-checked:ring-1 peer-checked:ring-selected-ink peer-focus-visible:ring-2 peer-focus-visible:ring-primary-ink";
 
 export function MoodCheckInForm({
   date,
@@ -34,7 +34,7 @@ export function MoodCheckInForm({
           {MOOD_SCALE.map((option) => (
             <label key={option.value} className="cursor-pointer">
               <input type="radio" name="mood" value={option.value} defaultChecked={moodDefault === String(option.value)} className="peer sr-only" required />
-              <span className="flex flex-col items-center gap-1.5 rounded-xl bg-surface-2 px-1 py-3 text-muted transition-colors hover:bg-surface-3 peer-checked:bg-primary-soft peer-checked:text-fg peer-checked:ring-2 peer-checked:ring-primary peer-focus-visible:ring-2 peer-focus-visible:ring-primary-ink">
+              <span className="flex flex-col items-center gap-1.5 rounded-xl bg-surface-2 px-1 py-3 text-muted transition-colors hover:bg-surface-3 peer-checked:bg-primary-soft peer-checked:text-fg peer-checked:ring-2 peer-checked:ring-selected-ink peer-focus-visible:ring-2 peer-focus-visible:ring-primary-ink">
                 <MoodIcon value={option.value} className="size-7" strokeWidth={1.75} />
                 <span className="text-xs font-medium">{option.label}</span>
               </span>

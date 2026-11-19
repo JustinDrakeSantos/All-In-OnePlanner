@@ -20,8 +20,8 @@ export function ContactDisclosure({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <details ref={ref} id="contact" className="faq-item group mt-8 scroll-mt-24 rounded-2xl bg-surface-2">
-      <summary className="flex cursor-pointer list-none items-center gap-3 rounded-2xl px-5 py-4 transition-colors hover:bg-surface-3">
+    <details ref={ref} id="contact" className="faq-item glass-card group mt-8 scroll-mt-24 rounded-2xl">
+      <summary className="flex cursor-pointer list-none items-center gap-3 rounded-2xl px-5 py-4 transition-colors hover:bg-white/45 dark:hover:bg-white/5">
         <MessageSquare className="size-5 shrink-0 text-primary-ink" aria-hidden />
         <span className="flex-1">
           <span className="block font-semibold">Send us a message</span>

@@ -16,6 +16,10 @@
  *   ≈2.4:1, so it is never text or a meaningful icon on light backgrounds;
  *   gold-700 on white ≈5.3:1 (small accent text and icons); navy on gold-100
  *   ≈15:1 (highlighted surfaces); gold-500 on navy ≈7:1 (accent text in dark mode).
+ * Glacier glass (the signed-in app), computed on the solid steps:
+ *   muted text ≥7:1 on the canvas and panels in both themes, ≥5.9:1 on selected fills;
+ *   selected nav text 13.7:1 (light) / 9.4:1 (dark), its glacier icon 5:1 / 5.7:1;
+ *   input outlines ≥3.1:1 on the canvas, panels, and dialogs; links ≥5.4:1 on panels.
  *
  * The theme is data-theme on <html>, set before paint by src/lib/theme-script.ts.
  */
@@ -61,6 +65,26 @@
   --gold-950: #3a2e0a;
 
   --slate-500: #8590a6;
+  --slate-600: #7c879e; /* input outlines: ≥3.4:1 on white, the canvas, and dialogs */
+
+  /* Ice: glacier-tinted whites for the signed-in app (canvas, navigation, panels, dialogs). */
+  --ice-10: #fbfdff; /* dialogs */
+  --ice-25: #fafcff; /* navigation, solid */
+  --ice-50: #f5f9fe; /* the canvas; also the landing page's base */
+  --ice-100: #edf4fc; /* panels and tinted surfaces */
+  --ice-200: #e3eef9;
+  --ice-250: #dbe6f2; /* dividers */
+  --ice-300: #cfe3f9; /* selected fill, hover */
+  /* Extra navy steps for the app in dark mode. */
+  --navy-925: #0e1d4d; /* navigation */
+  --navy-825: #15285f; /* dialogs */
+  --navy-775: #22377a;
+  --glacier-850: #1d4282; /* selected fill, hover */
+  /* The light the glass shows through: low contrast against the canvas. */
+  --wash-glacier: #d4e7fb;
+  --wash-sky: #bcd9f6;
+  --wash-night-glacier: #11306f;
+  --wash-night-sky: #1a3f8a;
 
   --red-50: #fcebea;
   --red-300: #ff8a80;
@@ -83,13 +107,15 @@
   --muted: var(--mist-600);
   --subtle: var(--mist-500);
   --line: var(--mist-150);
-  --input: var(--mist-200);
+  --input: var(--slate-600);
 
   --primary: var(--glacier-500);
   --primary-hover: var(--glacier-600);
   --primary-fg: var(--navy-900);
   --primary-ink: var(--glacier-800);
   --primary-soft: var(--glacier-100);
+  --primary-soft-hover: var(--mist-100);
+  --selected-ink: var(--glacier-700);
 
   --secondary: var(--navy-900);
   --secondary-hover: var(--navy-800);
@@ -105,8 +131,25 @@
   --success: var(--green-700);
   --success-soft: var(--green-50);
 
-  --sidebar: var(--glacier-50);
-  --sidebar-active: var(--glacier-200);
+  /* The signed-in app shell: canvas, wash, navigation, and the check-ins glass. */
+  --canvas: var(--ice-50);
+  --wash-from: var(--wash-glacier);
+  --wash-to: var(--wash-sky);
+  --nav: var(--ice-25); /* solid, and the fallback without backdrop blur */
+  --nav-line: var(--ice-250);
+  --nav-hover: rgb(31 100 174 / 0.06);
+  --nav-active: rgb(98 167 234 / 0.2);
+  --nav-active-fg: var(--navy-900);
+  --nav-active-icon: var(--glacier-800);
+  --panel-surface: var(--ice-100); /* solid fallback for the glass panel */
+  --panel-line: var(--ice-250);
+  --glass-nav: rgb(255 255 255 / 0.74);
+  --glass-nav-blur: 18px;
+  --glass-panel: rgb(255 255 255 / 0.5);
+  --glass-panel-blur: 18px;
+  --glass-border: rgb(255 255 255 / 0.7);
+  --glass-edge: rgb(255 255 255 / 0.95); /* the light-catching top edge */
+  --glass-divider: rgb(31 100 174 / 0.12);
 
   /* 3. Component tokens (light) */
   --chart-1: var(--glacier-700); /* validated against --surface: lightness, chroma, 3:1 */
@@ -120,7 +163,15 @@
   --tone-on-slate: var(--mist-0);
   --elev-card: 0 1px 2px rgb(12 27 72 / 0.05), 0 1px 1px rgb(12 27 72 / 0.03);
   --elev-pop: 0 12px 32px rgb(12 27 72 / 0.14), 0 2px 6px rgb(12 27 72 / 0.08);
+  --elev-panel: 0 1px 2px rgb(12 27 72 / 0.04), 0 8px 24px -12px rgb(12 27 72 / 0.1);
+  --elev-glass: 0 0 0 1px rgb(12 27 72 / 0.05), 0 1px 2px rgb(12 27 72 / 0.05), 0 16px 40px -20px rgb(12 27 72 / 0.28);
   --scrim: rgb(8 18 47 / 0.5);
+  /* Dialogs: a solid ice-white sheet over a navy-tinted scrim. */
+  --dialog: var(--ice-10);
+  --dialog-2: var(--ice-100);
+  --dialog-3: var(--ice-200);
+  --dialog-line: var(--ice-250);
+  --dialog-scrim: rgb(8 18 47 / 0.38);
 
   /* Landing page: color blocks, and the sky over a day (dawn → night). */
   --ink: var(--navy-900); /* text on light blocks, in either theme */
@@ -149,6 +200,18 @@
   /* The closing band: a sky above a horizon, the ground the same navy as the footer. */
   --dusk-sky: var(--navy-850);
   --dusk-ground: var(--navy-900);
+  /* Landing glass: frosted surfaces over soft glacier and gold washes. */
+  --lglass-fill: rgb(255 255 255 / 0.55);
+  --lglass-fill-strong: rgb(255 255 255 / 0.74);
+  --lglass-solid: #f8fbfe; /* without backdrop blur, or with reduced transparency */
+  --lglass-border: rgb(255 255 255 / 0.85);
+  --lglass-line: rgb(12 27 72 / 0.07); /* the edge where the glass meets white */
+  --lglass-edge: rgb(255 255 255 / 0.95);
+  --lglass-shadow: 0 1px 2px rgb(12 27 72 / 0.05), 0 28px 56px -30px rgb(12 27 72 / 0.34);
+  --lglass-base: #f5f9fe; /* the page under the washes */
+  --lglass-wash-1: rgb(98 167 234 / 0.4);
+  --lglass-wash-2: rgb(212 160 23 / 0.2);
+  --lglass-wash-3: rgb(140 193 242 / 0.5);
 
   color-scheme: light;
 }
@@ -163,13 +226,15 @@
   --muted: var(--frost-300);
   --subtle: var(--frost-400);
   --line: var(--navy-750);
-  --input: var(--navy-700);
+  --input: var(--navy-500);
 
   --primary: var(--glacier-500);
   --primary-hover: var(--glacier-400);
   --primary-fg: var(--navy-900);
   --primary-ink: var(--glacier-300);
   --primary-soft: var(--glacier-900);
+  --primary-soft-hover: var(--navy-800);
+  --selected-ink: var(--glacier-500);
 
   --secondary: var(--frost-100);
   --secondary-hover: var(--mist-0);
@@ -185,8 +250,24 @@
   --success: var(--green-300);
   --success-soft: var(--green-950);
 
-  --sidebar: var(--navy-950);
-  --sidebar-active: var(--glacier-900);
+  --canvas: var(--navy-950);
+  --wash-from: var(--wash-night-glacier);
+  --wash-to: var(--wash-night-sky);
+  --nav: var(--navy-925);
+  --nav-line: var(--navy-750);
+  --nav-hover: rgb(140 193 242 / 0.07);
+  --nav-active: rgb(98 167 234 / 0.22);
+  --nav-active-fg: var(--frost-100);
+  --nav-active-icon: var(--glacier-300);
+  --panel-surface: var(--navy-850);
+  --panel-line: var(--navy-750);
+  --glass-nav: rgb(14 29 77 / 0.82);
+  --glass-nav-blur: 18px;
+  --glass-panel: rgb(19 36 89 / 0.5);
+  --glass-panel-blur: 18px;
+  --glass-border: rgb(255 255 255 / 0.08);
+  --glass-edge: rgb(255 255 255 / 0.16);
+  --glass-divider: rgb(255 255 255 / 0.08);
 
   /* 3. Component tokens (dark) */
   --chart-1: var(--glacier-650); /* validated against the navy surface */
@@ -200,7 +281,14 @@
   --tone-on-slate: var(--navy-900);
   --elev-card: 0 0 0 1px rgb(255 255 255 / 0.04);
   --elev-pop: 0 16px 40px rgb(0 0 0 / 0.45);
+  --elev-panel: inset 0 1px 0 rgb(255 255 255 / 0.03), 0 8px 24px -12px rgb(0 0 0 / 0.5);
+  --elev-glass: 0 18px 44px -22px rgb(0 0 0 / 0.7);
   --scrim: rgb(3 8 24 / 0.6);
+  --dialog: var(--navy-825);
+  --dialog-2: var(--navy-800);
+  --dialog-3: var(--navy-775);
+  --dialog-line: var(--navy-700);
+  --dialog-scrim: rgb(3 8 24 / 0.62);
 
   /* Landing page: the sky keeps its colors; only blocks that would vanish into navy change. */
   --stage: var(--navy-850);
@@ -215,6 +303,17 @@
   --sky-sun-alpha: var(--sky-dark-sun-alpha);
   --dusk-sky: var(--navy-800);
   --dusk-ground: var(--navy-850);
+  --lglass-fill: rgb(19 36 89 / 0.42);
+  --lglass-base: transparent;
+  --lglass-fill-strong: rgb(12 27 72 / 0.7);
+  --lglass-solid: var(--navy-850);
+  --lglass-border: rgb(255 255 255 / 0.1);
+  --lglass-line: rgb(255 255 255 / 0.06);
+  --lglass-edge: rgb(255 255 255 / 0.16);
+  --lglass-shadow: 0 28px 56px -28px rgb(0 0 0 / 0.65);
+  --lglass-wash-1: rgb(98 167 234 / 0.2);
+  --lglass-wash-2: rgb(212 160 23 / 0.1);
+  --lglass-wash-3: rgb(72 147 224 / 0.2);
 
   color-scheme: dark;
 }
@@ -230,11 +329,36 @@
     --muted: var(--frost-300);
     --subtle: var(--frost-400);
     --line: var(--navy-750);
-    --input: var(--navy-700);
+    --input: var(--navy-500);
     --primary-ink: var(--glacier-300);
     --primary-soft: var(--glacier-900);
-    --sidebar: var(--navy-950);
-    --sidebar-active: var(--glacier-900);
+    --primary-soft-hover: var(--navy-800);
+    --selected-ink: var(--glacier-500);
+    --canvas: var(--navy-950);
+    --wash-from: var(--wash-night-glacier);
+    --wash-to: var(--wash-night-sky);
+    --nav: var(--navy-925);
+    --nav-line: var(--navy-750);
+    --nav-hover: rgb(140 193 242 / 0.07);
+    --nav-active: rgb(98 167 234 / 0.22);
+    --nav-active-fg: var(--frost-100);
+    --nav-active-icon: var(--glacier-300);
+    --panel-surface: var(--navy-850);
+    --panel-line: var(--navy-750);
+    --glass-nav: rgb(14 29 77 / 0.82);
+    --glass-nav-blur: 18px;
+    --glass-panel: rgb(19 36 89 / 0.5);
+    --glass-panel-blur: 18px;
+    --glass-border: rgb(255 255 255 / 0.08);
+    --glass-edge: rgb(255 255 255 / 0.16);
+    --glass-divider: rgb(255 255 255 / 0.08);
+    --elev-glass: 0 18px 44px -22px rgb(0 0 0 / 0.7);
+    --elev-panel: inset 0 1px 0 rgb(255 255 255 / 0.03), 0 8px 24px -12px rgb(0 0 0 / 0.5);
+    --dialog: var(--navy-825);
+    --dialog-2: var(--navy-800);
+    --dialog-3: var(--navy-775);
+    --dialog-line: var(--navy-700);
+    --dialog-scrim: rgb(3 8 24 / 0.62);
     --chart-1: var(--glacier-650);
     --stage: var(--navy-850);
     --block-night: var(--glacier-900);
@@ -248,6 +372,17 @@
     --sky-sun-alpha: var(--sky-dark-sun-alpha);
     --dusk-sky: var(--navy-800);
     --dusk-ground: var(--navy-850);
+    --lglass-fill: rgb(19 36 89 / 0.42);
+    --lglass-base: transparent;
+    --lglass-fill-strong: rgb(12 27 72 / 0.7);
+    --lglass-solid: var(--navy-850);
+    --lglass-border: rgb(255 255 255 / 0.1);
+    --lglass-line: rgb(255 255 255 / 0.06);
+    --lglass-edge: rgb(255 255 255 / 0.16);
+    --lglass-shadow: 0 28px 56px -28px rgb(0 0 0 / 0.65);
+    --lglass-wash-1: rgb(98 167 234 / 0.2);
+    --lglass-wash-2: rgb(212 160 23 / 0.1);
+    --lglass-wash-3: rgb(72 147 224 / 0.2);
     --accent-soft: var(--gold-950);
     --accent-ink: var(--gold-500);
     color-scheme: dark;
@@ -272,6 +407,8 @@
   --color-primary-fg: var(--primary-fg);
   --color-primary-ink: var(--primary-ink);
   --color-primary-soft: var(--primary-soft);
+  --color-primary-soft-hover: var(--primary-soft-hover);
+  --color-selected-ink: var(--selected-ink);
   --color-secondary: var(--secondary);
   --color-secondary-hover: var(--secondary-hover);
   --color-secondary-fg: var(--secondary-fg);
@@ -285,8 +422,16 @@
   --color-danger-soft: var(--danger-soft);
   --color-success: var(--success);
   --color-success-soft: var(--success-soft);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-active: var(--sidebar-active);
+  --color-canvas: var(--canvas);
+  --color-nav: var(--nav);
+  --color-nav-line: var(--nav-line);
+  --color-nav-hover: var(--nav-hover);
+  --color-nav-active: var(--nav-active);
+  --color-nav-active-fg: var(--nav-active-fg);
+  --color-nav-active-icon: var(--nav-active-icon);
+  --color-panel-surface: var(--panel-surface);
+  --color-panel-line: var(--panel-line);
+  --color-glass-divider: var(--glass-divider);
   --color-chart-1: var(--chart-1);
   --color-ink: var(--ink);
   --color-paper: var(--paper);
@@ -300,11 +445,14 @@
   --color-sky-night: var(--sky-night);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  /* Sansita: the wordmark and the landing page's display headings. The app itself uses Inter only. */
+  /* Sansita: the wordmark. The app itself uses Inter only. */
   --font-brand: var(--font-sansita), ui-serif, Georgia, serif;
+  /* Fraunces: the landing page's section headings (soft, optical-size serif). */
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
 
   --shadow-card: var(--elev-card);
   --shadow-pop: var(--elev-pop);
+  --shadow-panel: var(--elev-panel);
 
   /* Type scale: page title, section heading, panel heading, metadata, and micro labels. */
   --text-page: 1.75rem;
@@ -380,6 +528,11 @@
     background: var(--scrim);
   }
 
+  /* Overscroll past the signed-in app shows its canvas, not the page background. */
+  html:has(.app-canvas) {
+    background-color: var(--canvas);
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     html {
       scroll-behavior: smooth;
@@ -447,6 +600,346 @@
     background: linear-gradient(90deg, var(--surface-2) 0%, var(--surface-3) 50%, var(--surface-2) 100%);
     background-size: 200% 100%;
     animation: skeleton 1.4s ease-in-out infinite;
+  }
+
+  /*
+   * Frosted glass: the signed-in app's surfaces, from back to front.
+   *   .app-canvas     flat ice white (deep navy in dark mode); the shell is isolated, so
+   *                   the washes below sit on the canvas and under every piece of content
+   *   .app-wash       a low-contrast glacier wash behind the navigation (decorative)
+   *   .app-wash-main  softer glacier light across the content area, where the side panels sit
+   *   .checkins-wash  the wash behind the upper part of the dashboard's check-ins
+   *   .glass-nav      the desktop rail and the phone header: dense frosted glass
+   *   .glass-panel    side panels in every section (and the dashboard's check-ins): the clearest glass
+   *   bg-nav          the phone drawer: solid (a see-through drawer smudged page text behind its links)
+   * Glass fills are solid by default. They turn translucent and blur what's behind them only
+   * where the browser supports backdrop-filter, and turn solid again for people who ask for
+   * reduced transparency. The alpha is on the background color alone, so text, icons,
+   * controls, and focus rings stay fully opaque. Inputs, buttons, task controls, and schedule
+   * rows keep their solid fills. Nothing here animates.
+   */
+  .app-canvas {
+    background: var(--canvas);
+  }
+  /*
+   * Inside the app, the shared tokens follow the shell, so every module matches the dashboard:
+   *   --surface      solid: fields, cards, schedule rows (white; the navy canvas in dark mode)
+   *   --surface-2/3  tinted: tracks, chips, hovers, in ice instead of the site's blue-gray
+   *   --line         ice dividers
+   *   --primary-soft selected fills (filters, chips, secondary buttons) in pale glacier
+   *   --selected-ink the outline on a selected choice: glacier-800 / glacier-300, like links
+   */
+  .app-canvas {
+    --surface-2: var(--ice-100);
+    --surface-3: var(--ice-200);
+    --line: var(--ice-250);
+    --primary-soft: var(--glacier-200);
+    --primary-soft-hover: var(--ice-300);
+    --selected-ink: var(--glacier-800);
+    --elev-card: 0 1px 2px rgb(12 27 72 / 0.06), 0 0 0 1px rgb(31 100 174 / 0.08);
+  }
+  [data-theme="dark"] .app-canvas {
+    --bg: var(--navy-950);
+    --surface: var(--navy-950);
+    --surface-2: var(--navy-850);
+    --surface-3: var(--navy-800);
+    --line: var(--navy-750);
+    --primary-soft: var(--glacier-900);
+    --primary-soft-hover: var(--glacier-850);
+    --selected-ink: var(--glacier-300);
+    --elev-card: 0 0 0 1px var(--navy-750);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .app-canvas {
+      --bg: var(--navy-950);
+      --surface: var(--navy-950);
+      --surface-2: var(--navy-850);
+      --surface-3: var(--navy-800);
+      --line: var(--navy-750);
+      --primary-soft: var(--glacier-900);
+      --primary-soft-hover: var(--glacier-850);
+      --selected-ink: var(--glacier-300);
+      --elev-card: 0 0 0 1px var(--navy-750);
+    }
+  }
+  /* From md (48rem) up, the rail's 15rem column is painted to the bottom of the page too,
+     so overscroll and full-page captures past the sticky rail still show the rail and its edge. */
+  @media (width >= 48rem) {
+    .app-canvas {
+      background:
+        linear-gradient(to right, var(--nav) calc(15rem - 1px), var(--nav-line) calc(15rem - 1px), var(--nav-line) 15rem, transparent 15rem) no-repeat,
+        var(--canvas);
+    }
+  }
+
+  .app-wash,
+  .app-wash-main,
+  .checkins-wash {
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .app-wash {
+    display: none;
+  }
+  @media (width >= 48rem) {
+    /* Fixed, so the rail always has the wash behind it; it stays inside the rail's column
+       and the empty strip beside it, so the schedule and tasks never scroll over it. */
+    .app-wash {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: calc(15rem + 1.5rem);
+      height: 100dvh;
+      background: radial-gradient(closest-side, var(--wash-from) 0 84%, transparent 100%) -7rem 3rem / 30rem 30rem no-repeat;
+    }
+  }
+  /*
+   * Fixed, so every panel always has light behind it: glacier with a touch of gold, like the landing
+   * page. On wide screens the strongest light sits behind the side-panel column, where it's frosted
+   * by the panels (subtle text ≥4.66:1 through the glass); on narrow screens, where panels stack
+   * under the content, it's softer so text directly over it stays ≥4.5:1.
+   */
+  .app-wash-main {
+    --wm-blue: 0.18;
+    --wm-gold: 0.12;
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(closest-side, rgb(98 167 234 / var(--wm-blue)), transparent) right -6rem top 3rem / 34rem 30rem no-repeat,
+      radial-gradient(closest-side, rgb(212 160 23 / var(--wm-gold)), transparent) right 2rem bottom -4rem / 30rem 24rem no-repeat,
+      radial-gradient(closest-side, rgb(140 193 242 / calc(var(--wm-blue) * 1.2)), transparent) left 20% bottom -10rem / 40rem 24rem no-repeat;
+  }
+  [data-theme="dark"] .app-wash-main {
+    --wm-blue: 0.14;
+    --wm-gold: 0.07;
+  }
+  @media (width >= 48rem) {
+    .app-wash-main {
+      left: 15rem;
+    }
+  }
+  @media (width >= 64rem) {
+    .app-wash-main {
+      --wm-blue: 0.42;
+      --wm-gold: 0.2;
+    }
+    [data-theme="dark"] .app-wash-main {
+      --wm-blue: 0.22;
+      --wm-gold: 0.1;
+    }
+  }
+  .checkins-wash {
+    inset: -2.5rem -2.5rem auto -2.5rem;
+    height: 22rem;
+    background:
+      radial-gradient(closest-side, var(--wash-to) 0 86%, transparent 100%) 78% 0% / 17rem 14rem no-repeat,
+      radial-gradient(closest-side, var(--wash-from) 0 86%, transparent 100%) 0% 20% / 18rem 12rem no-repeat;
+  }
+
+  .glass-nav {
+    background-color: var(--nav);
+  }
+  .glass-panel {
+    background-color: var(--panel-surface);
+    border: 1px solid var(--panel-line);
+    box-shadow: var(--elev-panel);
+  }
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass-nav {
+      background-color: var(--glass-nav);
+      -webkit-backdrop-filter: blur(var(--glass-nav-blur));
+      backdrop-filter: blur(var(--glass-nav-blur));
+    }
+    .glass-panel {
+      background-color: var(--glass-panel);
+      border-color: var(--glass-border);
+      box-shadow:
+        inset 0 1px 0 var(--glass-edge),
+        var(--elev-glass);
+      -webkit-backdrop-filter: blur(var(--glass-panel-blur));
+      backdrop-filter: blur(var(--glass-panel-blur));
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass-nav {
+      background-color: var(--nav);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+    .glass-panel {
+      background-color: var(--panel-surface);
+      border-color: var(--panel-line);
+      box-shadow: var(--elev-panel);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+
+  /*
+   * Dialogs: a solid ice-white sheet (navy in dark mode), never glass, so forms stay crisp.
+   * Inside, the surface tokens point at the sheet's own steps: fields are the sheet color with
+   * an --input outline, and hovers and chips take the sheet's own ice (or navy) steps.
+   * The scrim is navy-tinted and, where supported, softly blurs the page behind it.
+   */
+  .dialog-surface {
+    --surface: var(--dialog);
+    --surface-2: var(--dialog-2);
+    --surface-3: var(--dialog-3);
+    --line: var(--dialog-line);
+    background-color: var(--dialog);
+    box-shadow:
+      0 0 0 1px var(--dialog-line),
+      var(--elev-pop);
+  }
+  .dialog-surface::backdrop {
+    background: var(--dialog-scrim, var(--scrim));
+  }
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .dialog-surface::backdrop {
+      -webkit-backdrop-filter: blur(3px);
+      backdrop-filter: blur(3px);
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .dialog-surface::backdrop {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+}
+
+/*
+ * Landing glass. Frosted surfaces on the marketing pages, front to back:
+ *   .landing-wash  soft glacier and gold light behind the whole page (fixed, decorative)
+ *   .wash-band     the same light inside a band that has its own background
+ *   .glass-card    the standard pane: translucent white (navy in dark mode), blurred, a bright top edge
+ *   .glass-strong  denser, for the floating header, where text scrolls underneath
+ *   .glass-tint    blur and edges only; the fill comes from a bg-* utility (the day's sky cards)
+ *   .glass-bezel   a thick pane around a product clip, drawn on ::before so the clip's box is unchanged
+ *   .glass-on-dark edges for glass that sits on navy in either theme
+ * Fills are solid until the browser supports backdrop-filter, and solid again with reduced
+ * transparency. Edges are inset shadows, so nothing changes size. Text stays fully opaque.
+ */
+@layer components {
+  .landing-wash {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    pointer-events: none;
+    background:
+      radial-gradient(closest-side, var(--lglass-wash-1), transparent) -12vw -8vh / 62vw 70vh no-repeat,
+      radial-gradient(closest-side, var(--lglass-wash-2), transparent) 8vw 62vh / 46vw 50vh no-repeat,
+      radial-gradient(closest-side, var(--lglass-wash-3), transparent) 68vw 30vh / 52vw 64vh no-repeat,
+      var(--lglass-base, transparent);
+  }
+  .wash-band {
+    background-image:
+      radial-gradient(closest-side, var(--lglass-wash-1), transparent),
+      radial-gradient(closest-side, var(--lglass-wash-2), transparent),
+      radial-gradient(closest-side, var(--lglass-wash-3), transparent);
+    background-size: 44rem 30rem, 34rem 26rem, 40rem 30rem;
+    background-position: -10rem 20%, 55% 110%, 105% -20%;
+    background-repeat: no-repeat;
+  }
+
+  .glass-card,
+  .glass-strong,
+  .glass-bezel::before {
+    background-color: var(--lglass-solid);
+    box-shadow:
+      inset 0 0 0 1px var(--lglass-line),
+      var(--lglass-shadow);
+  }
+  .glass-tint {
+    box-shadow:
+      inset 0 0 0 1px var(--lglass-line),
+      var(--lglass-shadow);
+  }
+  /* Glass on a navy surface in either theme: faint white edges instead of bright ones. */
+  .glass-on-dark {
+    --lglass-border: rgb(255 255 255 / 0.14);
+    --lglass-line: rgb(255 255 255 / 0.1);
+    --lglass-edge: rgb(255 255 255 / 0.22);
+    --lglass-shadow: 0 28px 56px -28px rgb(0 0 0 / 0.6);
+  }
+  .glass-bezel {
+    position: relative;
+    isolation: isolate;
+  }
+  .glass-bezel::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--bezel, 12px) * -1);
+    z-index: -1;
+    border-radius: calc(var(--bezel-radius, 12px) + var(--bezel, 12px));
+    pointer-events: none;
+  }
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass-card,
+    .glass-strong,
+    .glass-tint,
+    .glass-bezel::before {
+      -webkit-backdrop-filter: blur(20px) saturate(1.5);
+      backdrop-filter: blur(20px) saturate(1.5);
+      box-shadow:
+        inset 0 0 0 1px var(--lglass-border),
+        inset 0 1px 0 var(--lglass-edge),
+        0 0 0 1px var(--lglass-line),
+        var(--lglass-shadow);
+    }
+    .glass-card,
+    .glass-bezel::before {
+      background-color: var(--lglass-fill);
+    }
+    .glass-strong {
+      background-color: var(--lglass-fill-strong);
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass-card,
+    .glass-strong,
+    .glass-tint,
+    .glass-bezel::before {
+      background-color: var(--lglass-solid);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+    .landing-wash,
+    .wash-band {
+      background: none;
+    }
+  }
+}
+
+/* Fraunces at display sizes: softened corners and the optical size that matches the type. */
+.font-display {
+  font-variation-settings: "SOFT" 50;
+  font-optical-sizing: auto;
+}
+
+/*
+ * High contrast: the system's own colors mark the current page and keyboard focus.
+ * Unlayered on purpose, so it wins over the nav link's color utilities.
+ */
+@media (forced-colors: active) {
+  .nav-link[aria-current="page"] {
+    forced-color-adjust: none;
+    background-color: Highlight;
+    color: HighlightText;
+  }
+  .nav-link[aria-current="page"] svg {
+    color: HighlightText;
+  }
+  .nav-link:focus-visible {
+    outline-color: Highlight;
+  }
+  /* The washes are decoration; system colors replace the glass, so they'd only add noise. */
+  .app-wash,
+  .app-wash-main,
+  .checkins-wash {
+    display: none;
   }
 }
 
@@ -523,7 +1016,6 @@
  *   .arc-reveal, .marker-in   the day timeline's line and time markers
  *   .lift-in       the walkthrough's interface cards (share one timeline: --walk)
  *   .sky-art       the moon that becomes the sun, behind the whole page (below)
- *   .header-elevate
  */
 /*
  * Hero: a topographic map lies behind the headline and buttons and covers the
@@ -645,11 +1137,6 @@
       animation-timeline: --walk;
       animation-range: entry 15% cover 35%;
     }
-    .header-elevate {
-      animation: header-elevate linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 96px;
-    }
   }
 }
 
@@ -677,6 +1164,275 @@
   }
   to {
     clip-path: inset(0 0 0 0);
+  }
+}
+
+/*
+ * The day timeline's animations (DaySection in day-fx.tsx; data-fx holds the switches).
+ * --t is the time of day, 0 at 7:30 AM to 1 at 10:00 PM. With "auto" it plays on its own once the
+ * section is in view (day-auto, resting at each hour); otherwise it follows the section's scroll.
+ * Everything else reads it:
+ *   sun    .day-sun rides the arc. The arc is a quadratic curve whose x is linear in t, so
+ *          left = 8.333% + 83.333% * t and top = 102px - 216px * t(1 - t) land on every marker.
+ *          The card under it lifts and warms. Narrow screens: the sun runs down the rail.
+ *   sheen  a streak of light crosses each card as the sun passes over it, and the band's light
+ *          follows the sun, warm at dawn and deep blue by night (.day-tint)
+ *   moments  each card's detail goes from its "before" to its "after" state as the sun arrives
+ *          (--on, 0 → 1 just before the sun reaches the card's center; see the m-* classes)
+ *   tilt   the card under the pointer tilts toward it, with a glare (pointer values from day-fx.tsx)
+ * Per card: --d is its signed distance from the sun, in cards (negative: not reached yet), and
+ * --lit is 1 under the sun, fading to 0 a card away.
+ * Nothing runs until DaySection sets data-live (a driver exists and motion isn't reduced); until then,
+ * and without JavaScript, there's no sun or streak and every card shows its finished state.
+ */
+@property --t {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --rx {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@property --ry {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@property --glare {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.day-sun,
+.day-tint {
+  display: none;
+}
+.day-card {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+.day-card::before,
+.day-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Scroll mode (no "auto"): the day follows the section's scroll. */
+  @supports (animation-timeline: view()) {
+    .day-section[data-live]:not([data-fx~="auto"]) {
+      animation: day-time linear both;
+      animation-timeline: view();
+      animation-range: cover 15% cover 75%;
+    }
+    /* Wide screens: the timeline is a single row, so the sun covers it in less scrolling. */
+    @media (width >= 64rem) {
+      .day-section[data-live]:not([data-fx~="auto"]) {
+        animation-range: cover 30% cover 62%;
+      }
+    }
+  }
+  /* Auto mode: the day plays on its own once DaySection sets data-play (dawn until then). */
+  .day-section[data-live][data-fx~="auto"][data-play] {
+    animation: day-auto 8.6s linear both;
+  }
+  /* As specific as the rule above, and after it, since that rule's shorthand resets the play state. */
+  .day-section[data-live][data-fx~="auto"][data-play="paused"] {
+    animation-play-state: paused;
+  }
+
+  .day-section[data-live] .day-card {
+    --d: calc(var(--t) * 5 - var(--i));
+  }
+
+  [data-live][data-fx~="sun"] .day-sun {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    left: 12px;
+    top: calc(16px + var(--t) * (100% - 32px));
+    width: 16px;
+    height: 16px;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fff6d6, var(--gold-500) 62%);
+    box-shadow:
+      0 0 0 5px rgb(212 160 23 / 0.22),
+      0 0 28px 8px rgb(212 160 23 / 0.45);
+    pointer-events: none;
+  }
+  [data-live][data-fx~="sun"] .day-card {
+    --lit: max(0, 1 - max(var(--d), -1 * var(--d)));
+    translate: 0 calc(var(--lit) * -8px);
+  }
+  [data-live][data-fx~="sun"] .day-card::after {
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(120% 75% at 50% 0%, rgb(255 222 140 / calc(var(--lit) * 0.42)), transparent 72%);
+  }
+
+  [data-live][data-fx~="moments"] .day-card {
+    --on: clamp(0, (var(--d) + 0.3) * 5, 1);
+  }
+
+  [data-live][data-fx~="sheen"] .day-card::before {
+    /* 180% of the card wide, so at --d = ±1 the streak is fully off either edge. */
+    inset: -10% -40%;
+    background: linear-gradient(100deg, transparent 38%, rgb(255 255 255 / 0.55) 48%, rgb(255 255 255 / 0.14) 55%, transparent 62%);
+    translate: calc(clamp(-1.5, var(--d), 1.5) * 75%) 0;
+  }
+  [data-live][data-fx~="sheen"] .day-tint {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      55% 75% at calc(12% + var(--t) * 76%) 0%,
+      color-mix(in oklab, rgb(212 160 23 / 0.3), rgb(44 65 133 / 0.32) calc(var(--t) * 100%)),
+      transparent 72%
+    );
+  }
+
+  @media (width >= 64rem) {
+    [data-live][data-fx~="sun"] .day-sun {
+      left: calc(8.333% + var(--t) * 83.333%);
+      top: calc(102px - 216px * var(--t) * (1 - var(--t)));
+    }
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  [data-fx~="tilt"] .day-card {
+    transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+    transition:
+      --rx 300ms var(--ease-arrive),
+      --ry 300ms var(--ease-arrive),
+      --glare 300ms linear;
+  }
+  /* The glare: a soft spot of light under the pointer, layered over the sun's warmth. */
+  [data-fx~="tilt"] .day-card::after {
+    inset: 0;
+    border-radius: inherit;
+    background:
+      radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / calc(var(--glare) * 0.4)), transparent 55%),
+      radial-gradient(120% 75% at 50% 0%, rgb(255 222 140 / calc(var(--lit, 0) * 0.42)), transparent 72%);
+  }
+}
+
+/*
+ * A card's moment, from "before" (--on: 0) to "after" (--on: 1). Without the moments switch --on
+ * is unset, so everything shows the after state. Only the outgoing "before" pieces vanish;
+ * nothing a visitor needs waits on the sun, and the entry text is never below 35%.
+ */
+.m-on {
+  opacity: var(--on, 1);
+}
+.m-off {
+  opacity: calc(1 - var(--on, 1));
+}
+.m-pop {
+  opacity: var(--on, 1);
+  scale: calc(0.4 + 0.6 * var(--on, 1));
+}
+.m-swap {
+  display: inline-grid;
+}
+.m-swap > * {
+  grid-area: 1 / 1;
+  justify-self: end;
+}
+.m-strike {
+  position: relative;
+  opacity: calc(1 - 0.3 * var(--on, 1));
+}
+.m-strike::after {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 1px;
+  background: currentColor;
+  transform-origin: left;
+  scale: var(--on, 1) 1;
+}
+.m-roll {
+  translate: 0 calc(var(--on, 1) * -50%);
+}
+.m-bar {
+  transform-origin: left;
+  scale: calc(var(--from, 0) + (1 - var(--from, 0)) * var(--on, 1)) 1;
+}
+.m-write {
+  /* The entry writes in line by line: written lines solid, the rest faint. */
+  mask-image: linear-gradient(to bottom, #000 calc(var(--on, 1) * 130% - 30%), rgb(0 0 0 / 0.35) calc(var(--on, 1) * 130%));
+}
+
+@media (forced-colors: active) {
+  .day-sun,
+  .day-tint,
+  .day-card::before,
+  .day-card::after {
+    display: none;
+  }
+}
+
+@keyframes day-auto {
+  /* Rest at each hour for a moment, so its card's moment plays; ease between hours. */
+  0% {
+    --t: 0;
+  }
+  6.98% {
+    --t: 0;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
+  }
+  16.28% {
+    --t: 0.2;
+  }
+  25.58% {
+    --t: 0.2;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
+  }
+  34.88% {
+    --t: 0.4;
+  }
+  44.19% {
+    --t: 0.4;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
+  }
+  53.49% {
+    --t: 0.6;
+  }
+  62.79% {
+    --t: 0.6;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
+  }
+  72.09% {
+    --t: 0.8;
+  }
+  81.40% {
+    --t: 0.8;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1);
+  }
+  90.70% {
+    --t: 1;
+  }
+  100% {
+    --t: 1;
+  }
+}
+
+@keyframes day-time {
+  from {
+    --t: 0;
+  }
+  to {
+    --t: 1;
   }
 }
 
@@ -906,8 +1662,3 @@
   }
 }
 
-@keyframes header-elevate {
-  to {
-    box-shadow: 0 1px 0 var(--line);
-  }
-}

@@ -84,7 +84,7 @@ export function ProductTour({ stops }: { stops: TourStop[] }) {
         ref={listRef}
         role="tablist"
         aria-label="Parts of All-In Planner"
-        className="relative -mx-4 flex gap-1 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0"
+        className="relative -mx-4 flex gap-2 overflow-x-auto px-4 pt-1 pb-3 sm:mx-0 sm:flex-wrap sm:px-0"
       >
         {stops.map((item, index) => {
           const selected = index === active;
@@ -102,7 +102,7 @@ export function ProductTour({ stops }: { stops: TourStop[] }) {
               onKeyDown={onKeyDown}
               className={cn(
                 "inline-flex items-center gap-2 rounded-full py-2 pr-4 pl-3 text-sm font-medium whitespace-nowrap transition-colors duration-300",
-                selected ? "bg-secondary text-secondary-fg" : "bg-surface-2 text-muted hover:bg-surface-3 hover:text-fg",
+                selected ? "bg-secondary text-secondary-fg shadow-[0_10px_24px_-12px_rgb(12_27_72/0.6)]" : "glass-card text-muted hover:text-fg",
               )}
             >
               {Icon ? <Icon className={cn("size-4 transition-transform duration-300 ease-spring", selected && "scale-110")} aria-hidden /> : null}
@@ -119,7 +119,7 @@ export function ProductTour({ stops }: { stops: TourStop[] }) {
         className="mt-8 grid items-center gap-8 md:mt-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-14"
       >
         <div key={stop.key} className="animate-fade-in lg:py-6" aria-live={picked ? "polite" : "off"}>
-          <h3 className="font-brand text-3xl leading-[1.08] tracking-tight sm:text-4xl">{stop.heading}</h3>
+          <h3 className="font-display text-3xl leading-[1.08] font-semibold tracking-[-0.02em] sm:text-4xl">{stop.heading}</h3>
           <p className="mt-3 max-w-md text-lg text-muted">{stop.body}</p>
           <ul className="mt-6 space-y-3">
             {stop.points.map((point) => (
@@ -132,7 +132,7 @@ export function ProductTour({ stops }: { stops: TourStop[] }) {
             ))}
           </ul>
         </div>
-        <div key={`${stop.key}-clip`} className="animate-fade-in">
+        <div key={`${stop.key}-clip`} className="glass-bezel animate-fade-in [--bezel:8px] sm:[--bezel:12px]">
           <DemoVideo
             name={stop.key}
             title={stop.label}

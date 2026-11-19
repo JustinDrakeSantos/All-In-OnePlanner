@@ -17,23 +17,30 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <ToastProvider>
-      {/* The gradient paints the sidebar column full height even when the page is taller than the screen. */}
-      <div className="min-h-dvh md:grid md:grid-cols-[15rem_minmax(0,1fr)] md:bg-[linear-gradient(to_right,var(--sidebar)_15rem,transparent_15rem)]">
+      {/*
+        One canvas behind the rail and the page. The shell is isolated, so the decorative washes
+        (z-index -1) sit on the canvas and under all content, where the glass rail, header, and
+        panel can blur them. Horizontal overflow is clipped so a wash never widens the page.
+      */}
+      <div className="app-canvas relative isolate min-h-dvh overflow-x-clip md:grid md:grid-cols-[15rem_minmax(0,1fr)]">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-surface focus:px-3 focus:py-2"
         >
           Skip to content
         </a>
+        <div aria-hidden className="app-wash" />
+        <div aria-hidden className="app-wash-main" />
 
-        <aside className="sticky top-0 hidden h-dvh flex-col bg-sidebar px-3 pt-5 pb-4 md:flex">
+        <aside className="glass-nav sticky top-0 hidden h-dvh flex-col border-r border-nav-line px-3 pt-5 pb-4 md:flex">
           <div className="mb-6 flex items-center justify-between pr-1 pl-2">
             <Link href="/dashboard" className="rounded-lg">
               <Logo />
             </Link>
             <ThemeToggle />
           </div>
-          <nav aria-label="App" className="min-h-0 flex-1 overflow-y-auto">
+          {/* The padding (offset by the margin) leaves room for focus rings inside the scrolling area. */}
+          <nav aria-label="App" className="-m-1 min-h-0 flex-1 overflow-y-auto p-1">
             <Suspense fallback={<NavList pathname={null} />}>
               <ActiveNavList />
             </Suspense>

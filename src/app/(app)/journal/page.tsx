@@ -156,7 +156,7 @@ async function JournalContent({ searchParams }: { searchParams: PageProps<"/jour
         </div>
       </div>
 
-      <aside aria-label="Journal summary" className="space-y-6 rounded-2xl bg-surface-2 p-5">
+      <aside aria-label="Journal summary" className="glass-panel space-y-6 rounded-2xl p-5">
         <dl>
           <StatRow label="Days in a row" value={currentStreak(days, today)} emphasis={currentStreak(days, today) > 0 ? "accent" : undefined} />
           <StatRow label="Days written this month" value={thisMonth} />

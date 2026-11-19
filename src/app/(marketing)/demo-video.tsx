@@ -138,7 +138,7 @@ export function DemoVideo({
   }, [playing, onTime, track]);
 
   return (
-    <div ref={frameRef} className="group relative overflow-clip rounded-xl bg-surface-2 shadow-pop ring-1 ring-fg/5">
+    <div ref={frameRef} className="group relative overflow-clip rounded-xl bg-surface-2 shadow-[0_1px_3px_rgb(12_27_72/0.14)] ring-1 ring-fg/5">
       {/*
         The camera moves this layer; without `follow` it just sits still. Its
         background is a blurred copy of the poster, built into the page, so the

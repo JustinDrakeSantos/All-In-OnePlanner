@@ -11,9 +11,9 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-surface focus:px-3 focus:py-2">
         Skip to content
       </a>
-      {/* Solid, so nothing shows through it while the page scrolls underneath. */}
-      <header className="header-elevate sticky top-0 z-30 bg-bg">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+      {/* A floating pane of dense frosted glass: the page shows through it, softened, as it scrolls. */}
+      <header className="sticky top-0 z-30 px-3 pt-3 sm:px-4">
+        <div className="glass-strong mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 rounded-2xl pr-2 pl-3 sm:pr-2.5 sm:pl-5">
           <Link href="/" className="rounded-lg">
             <Logo />
           </Link>
@@ -22,7 +22,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
             <a href="#connected" className="transition-colors hover:text-fg">How it works</a>
             <a href="#faq" className="transition-colors hover:text-fg">FAQ</a>
           </nav>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1 sm:gap-1.5">
             <ThemeToggle />
             <Suspense fallback={<SignedOutButtons />}>
               <AccountButtons />
@@ -33,7 +33,8 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       <main id="main" className="flex-1">
         {children}
       </main>
-      <footer className="bg-secondary text-secondary-fg dark:bg-surface-2 dark:text-fg">
+      {/* Positioned, so it paints over the landing page's fixed background wash. */}
+      <footer className="relative bg-secondary text-secondary-fg dark:bg-surface-2 dark:text-fg">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <p className="opacity-80">All-In Planner. Your day, all in one place.</p>
           <nav aria-label="Footer" className="flex gap-5 opacity-80">
@@ -50,10 +51,10 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
 function SignedOutButtons() {
   return (
     <>
-      <ButtonLink href="/login" variant="ghost" size="sm">
+      <ButtonLink href="/login" variant="ghost" size="sm" className="rounded-xl!">
         Log in
       </ButtonLink>
-      <ButtonLink href="/signup" size="sm">
+      <ButtonLink href="/signup" size="sm" className="rounded-xl!">
         Sign up
       </ButtonLink>
     </>
@@ -64,7 +65,7 @@ async function AccountButtons() {
   const user = await getCurrentUser();
   if (!user) return <SignedOutButtons />;
   return (
-    <ButtonLink href="/dashboard" size="sm">
+    <ButtonLink href="/dashboard" size="sm" className="rounded-xl!">
       Open your planner
     </ButtonLink>
   );

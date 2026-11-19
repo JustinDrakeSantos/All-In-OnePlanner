@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { MoodIcon } from "@/components/mood-icon";
 import { ButtonLink } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
-import { PageBody, PageHeader, PageSkeleton, ProgressBar, StatRow } from "@/components/ui/misc";
+import { CheckinsFrame, glassPanelClasses, PageBody, PageHeader, PageSkeleton, ProgressBar, StatRow } from "@/components/ui/misc";
 import { JOURNAL_KIND_LABELS, moodLabel, promptOfTheDay } from "@/lib/constants";
 import { addDays, dateRange, formatDate, formatLongDate, greetingFor, relativeDayLabel } from "@/lib/dates";
 import { cn } from "@/lib/cn";
@@ -31,7 +31,7 @@ export default function DashboardPage() {
       fallback={
         <>
           <PageHeader title="Dashboard" />
-          <PageSkeleton />
+          <PageSkeleton layout="dashboard" />
         </>
       }
     >
@@ -129,84 +129,86 @@ async function Dashboard() {
           </Card>
         </div>
 
-        {/* Side summary: one tinted panel, each part only as tall as its content. */}
-        <aside aria-label="Today's check-ins" className="divide-y divide-line rounded-2xl bg-surface-2 px-5">
-          <section className="py-5">
-            <div className="mb-3 flex items-baseline justify-between">
-              <h2 className="text-panel font-semibold">Mood</h2>
-              <TextLink href="/mood" className="text-sm">
-                {todaysMood ? "Edit" : "Check in"}
-              </TextLink>
-            </div>
-            {todaysMood ? (
-              <p className="mb-3 flex items-center gap-2.5">
-                <MoodIcon value={todaysMood.mood} className="size-7 text-chart-1" />
-                <span>
-                  <span className="block text-sm font-medium">Feeling {moodLabel(todaysMood.mood).toLowerCase()}</span>
-                  {todaysMood.emotions.length ? <span className="block text-xs text-muted capitalize">{todaysMood.emotions.slice(0, 3).join(", ")}</span> : null}
-                </span>
-              </p>
-            ) : (
-              <p className="mb-3 text-sm text-muted">No check-in yet today.</p>
-            )}
-            <ol className="grid grid-cols-7 gap-1 text-center" aria-label="Mood, last 7 days">
-              {dateRange(weekAgo, today).map((d) => {
-                const m = moodByDate.get(d);
-                return (
-                  <li key={d} className={cn("rounded-md py-1", d === today && "bg-surface")}>
-                    {m ? <MoodIcon value={m.mood} className="mx-auto size-[18px] text-chart-1" /> : <span className="mx-auto block size-[18px] text-subtle" aria-hidden>·</span>}
-                    <span className="block text-micro text-muted">{formatDate(d, { weekday: "narrow" })}</span>
-                    <span className="sr-only">{formatDate(d, { weekday: "long" })}: {m ? moodLabel(m.mood) : "no check-in"}</span>
-                  </li>
-                );
-              })}
-            </ol>
-          </section>
-
-          <section className="py-5">
-            <h2 className="mb-3 text-panel font-semibold">Habits</h2>
-            <HabitGrid userId={user.id} today={today} compact />
-          </section>
-
-          <section className="py-5">
-            <h2 className="mb-3 text-panel font-semibold">Water</h2>
-            <WaterTracker userId={user.id} date={today} units={user.unitSystem} goalMl={user.waterGoalMl} showCustom={false} />
-          </section>
-
-          <section className="py-5">
-            <h2 className="mb-2 text-panel font-semibold">This week</h2>
-            <div className="mb-1 flex items-baseline justify-between text-sm">
-              <span className="text-muted">Tasks done of due</span>
-              <span className="font-semibold tabular-nums">{stats.doneOfDueThisWeek} / {stats.dueThisWeek}</span>
-            </div>
-            <ProgressBar value={stats.doneOfDueThisWeek} max={Math.max(stats.dueThisWeek, 1)} label="Tasks due this week that are done" />
-            <dl className="mt-2">
-              <StatRow label="Task streak" value={`${stats.currentStreak} ${stats.currentStreak === 1 ? "day" : "days"}`} emphasis={stats.currentStreak > 0 ? "accent" : undefined} />
-              <StatRow label="Workouts" value={doneWorkouts.length} />
-              <StatRow label="Active minutes" value={activeMinutes} />
-              <StatRow label="Steps today" value={steps === null ? "None logged" : steps.toLocaleString("en-US")} />
-            </dl>
-          </section>
-
-          <section className="py-5">
-            <h2 className="mb-2 text-panel font-semibold">Journal</h2>
-            <Link href={`/journal/new?kind=entry&prompt=${encodeURIComponent(prompt)}`} className="block rounded-xl bg-accent-soft px-4 py-3 transition-colors hover:bg-accent/40">
-              <span className="block text-xs text-muted">Today&apos;s prompt</span>
-              <span className="mt-0.5 block text-panel leading-snug font-medium">{prompt}</span>
-            </Link>
-            {entries.length ? (
-              <ul className="mt-3 space-y-1.5 text-sm">
-                {entries.map((e) => (
-                  <li key={e.id} className="flex items-baseline gap-3">
-                    <Link href={`/journal/${e.id}`} className="min-w-0 flex-1 truncate hover:text-primary-ink hover:underline">{e.title}</Link>
-                    <span className="shrink-0 text-xs text-muted">{relativeDayLabel(e.date, today)}</span>
-                    <span className="sr-only">{JOURNAL_KIND_LABELS[e.kind]}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </section>
-        </aside>
+        {/* Side summary: one frosted-glass panel over a soft wash, each part only as tall as its content. */}
+        <CheckinsFrame>
+          <aside aria-label="Today's check-ins" className={glassPanelClasses}>
+            <section className="py-5">
+              <div className="mb-3 flex items-baseline justify-between">
+                <h2 className="text-panel font-semibold">Mood</h2>
+                <TextLink href="/mood" className="text-sm">
+                  {todaysMood ? "Edit" : "Check in"}
+                </TextLink>
+              </div>
+              {todaysMood ? (
+                <p className="mb-3 flex items-center gap-2.5">
+                  <MoodIcon value={todaysMood.mood} className="size-7 text-chart-1" />
+                  <span>
+                    <span className="block text-sm font-medium">Feeling {moodLabel(todaysMood.mood).toLowerCase()}</span>
+                    {todaysMood.emotions.length ? <span className="block text-xs text-muted capitalize">{todaysMood.emotions.slice(0, 3).join(", ")}</span> : null}
+                  </span>
+                </p>
+              ) : (
+                <p className="mb-3 text-sm text-muted">No check-in yet today.</p>
+              )}
+              <ol className="grid grid-cols-7 gap-1 text-center" aria-label="Mood, last 7 days">
+                {dateRange(weekAgo, today).map((d) => {
+                  const m = moodByDate.get(d);
+                  return (
+                    <li key={d} className={cn("rounded-md py-1", d === today && "bg-surface")}>
+                      {m ? <MoodIcon value={m.mood} className="mx-auto size-[18px] text-chart-1" /> : <span className="mx-auto block size-[18px] text-subtle" aria-hidden>·</span>}
+                      <span className="block text-micro text-muted">{formatDate(d, { weekday: "narrow" })}</span>
+                      <span className="sr-only">{formatDate(d, { weekday: "long" })}: {m ? moodLabel(m.mood) : "no check-in"}</span>
+                    </li>
+                  );
+                })}
+              </ol>
+            </section>
+  
+            <section className="py-5">
+              <h2 className="mb-3 text-panel font-semibold">Habits</h2>
+              <HabitGrid userId={user.id} today={today} compact />
+            </section>
+  
+            <section className="py-5">
+              <h2 className="mb-3 text-panel font-semibold">Water</h2>
+              <WaterTracker userId={user.id} date={today} units={user.unitSystem} goalMl={user.waterGoalMl} showCustom={false} />
+            </section>
+  
+            <section className="py-5">
+              <h2 className="mb-2 text-panel font-semibold">This week</h2>
+              <div className="mb-1 flex items-baseline justify-between text-sm">
+                <span className="text-muted">Tasks done of due</span>
+                <span className="font-semibold tabular-nums">{stats.doneOfDueThisWeek} / {stats.dueThisWeek}</span>
+              </div>
+              <ProgressBar value={stats.doneOfDueThisWeek} max={Math.max(stats.dueThisWeek, 1)} label="Tasks due this week that are done" />
+              <dl className="mt-2">
+                <StatRow label="Task streak" value={`${stats.currentStreak} ${stats.currentStreak === 1 ? "day" : "days"}`} emphasis={stats.currentStreak > 0 ? "accent" : undefined} />
+                <StatRow label="Workouts" value={doneWorkouts.length} />
+                <StatRow label="Active minutes" value={activeMinutes} />
+                <StatRow label="Steps today" value={steps === null ? "None logged" : steps.toLocaleString("en-US")} />
+              </dl>
+            </section>
+  
+            <section className="py-5">
+              <h2 className="mb-2 text-panel font-semibold">Journal</h2>
+              <Link href={`/journal/new?kind=entry&prompt=${encodeURIComponent(prompt)}`} className="block rounded-xl bg-accent-soft px-4 py-3 transition-colors hover:bg-accent/40">
+                <span className="block text-xs text-muted">Today&apos;s prompt</span>
+                <span className="mt-0.5 block text-panel leading-snug font-medium">{prompt}</span>
+              </Link>
+              {entries.length ? (
+                <ul className="mt-3 space-y-1.5 text-sm">
+                  {entries.map((e) => (
+                    <li key={e.id} className="flex items-baseline gap-3">
+                      <Link href={`/journal/${e.id}`} className="min-w-0 flex-1 truncate hover:text-primary-ink hover:underline">{e.title}</Link>
+                      <span className="shrink-0 text-xs text-muted">{relativeDayLabel(e.date, today)}</span>
+                      <span className="sr-only">{JOURNAL_KIND_LABELS[e.kind]}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </section>
+          </aside>
+        </CheckinsFrame>
       </PageBody>
     </>
   );

@@ -60,13 +60,38 @@ export function Skeleton({ className }: { className?: string }) {
   return <div className={cn("skeleton rounded-lg", className)} aria-hidden />;
 }
 
+/** The dashboard's check-ins: one frosted-glass surface with quiet dividers between its sections. */
+export const glassPanelClasses = "glass-panel divide-y divide-glass-divider rounded-2xl px-5";
+
+/**
+ * Holds the check-ins panel and the wash behind its upper part, which reaches past the
+ * panel's edges so the same color shows crisply on the page and softly through the glass.
+ */
+export function CheckinsFrame({ children }: { children: ReactNode }) {
+  return (
+    <div className="relative min-w-0">
+      <div aria-hidden className="checkins-wash" />
+      {children}
+    </div>
+  );
+}
+
 /** Placeholder shown while a page's personal data streams in. */
-export function PageSkeleton({ layout = "split" }: { layout?: "split" | "single" | "grid" }) {
+export function PageSkeleton({ layout = "split" }: { layout?: "split" | "single" | "grid" | "dashboard" }) {
   const block = (lines: number, key: number) => (
-    <div key={key} className="rounded-2xl bg-surface-2 p-5">
+    <div key={key} className="glass-panel rounded-2xl p-5">
       <Skeleton className="mb-4 h-4 w-1/3" />
       {Array.from({ length: lines }, (_, i) => (
         <Skeleton key={i} className={cn("mb-2.5 h-3.5", i % 3 === 2 ? "w-2/3" : "w-full")} />
+      ))}
+    </div>
+  );
+  // A heading over rows, straight on the page (the dashboard's schedule and tasks).
+  const plain = (rows: number, key: number) => (
+    <div key={key}>
+      <Skeleton className="mb-4 h-4 w-1/4" />
+      {Array.from({ length: rows }, (_, i) => (
+        <Skeleton key={i} className="mb-1 h-12 w-full" />
       ))}
     </div>
   );
@@ -75,7 +100,22 @@ export function PageSkeleton({ layout = "split" }: { layout?: "split" | "single"
       <p className="sr-only" role="status">
         Loading…
       </p>
-      {layout === "split" ? (
+      {layout === "dashboard" ? (
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,1fr)_20rem]">
+          <div className="space-y-10">{[plain(4, 0), plain(3, 1)]}</div>
+          <CheckinsFrame>
+            <div className={glassPanelClasses}>
+              {[0, 1, 2, 3].map((key) => (
+                <div key={key} className="py-5">
+                  <Skeleton className="mb-4 h-4 w-1/3" />
+                  <Skeleton className="mb-2.5 h-3.5 w-full" />
+                  <Skeleton className="h-3.5 w-2/3" />
+                </div>
+              ))}
+            </div>
+          </CheckinsFrame>
+        </div>
+      ) : layout === "split" ? (
         <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
           <div className="space-y-6">{[block(8, 0), block(4, 1)]}</div>
           <div className="space-y-6">{[block(3, 2), block(3, 3), block(2, 4)]}</div>
@@ -124,7 +164,7 @@ export function Logo({ withWordmark = true, className }: { withWordmark?: boolea
     <span className={cn("inline-flex items-center gap-2 text-fg", className)}>
       {/* Tiny already; served as-is so it never depends on the image resizer. */}
       <Image src="/images/logo.png" alt="" width={22} height={33} preload unoptimized className="h-8 w-auto dark:hue-rotate-180 dark:invert" />
-      {withWordmark ? <span className="font-brand text-[1.2rem] leading-none tracking-tight">All-In Planner</span> : null}
+      {withWordmark ? <span className="font-brand text-[1.2rem] leading-none tracking-tight whitespace-nowrap">All-In Planner</span> : null}
     </span>
   );
 }
@@ -149,7 +189,7 @@ export function TabLinks({
           className={cn(
             "relative px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors",
             "after:absolute after:inset-x-3 after:-bottom-px after:h-0.5 after:rounded-full after:transition-colors",
-            tab.key === active ? "text-fg after:bg-primary" : "text-muted after:bg-transparent hover:text-fg",
+            tab.key === active ? "text-fg after:bg-selected-ink" : "text-muted after:bg-transparent hover:text-fg",
           )}
         >
           {tab.label}

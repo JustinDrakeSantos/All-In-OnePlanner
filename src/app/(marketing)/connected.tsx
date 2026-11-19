@@ -110,13 +110,13 @@ export function Connected() {
     <section
       id="connected"
       aria-labelledby="connected-heading"
-      className="relative isolate scroll-mt-20 overflow-clip bg-secondary py-16 text-secondary-fg md:py-20 dark:bg-surface-2 dark:text-fg"
+      className="wash-band relative isolate scroll-mt-20 overflow-clip bg-secondary py-16 text-secondary-fg md:py-20 dark:bg-surface-2 dark:text-fg"
     >
       <SkyWindow id="connected" onDark />
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
         <div className="max-w-2xl">
-          <h2 id="connected-heading" className="font-brand text-4xl tracking-tight sm:text-5xl">
-            Your day doesn&apos;t happen in separate apps
+          <h2 id="connected-heading" className="font-display font-semibold tracking-[-0.025em] text-4xl sm:text-5xl">
+            Your day doesn&apos;t happen in <em className="text-[var(--glacier-300)]">separate apps</em>
           </h2>
           <p className="mt-3 text-lg opacity-80">Follow one evening run through All-In Planner.</p>
         </div>
@@ -133,7 +133,7 @@ export function Connected() {
                 <h3 className="text-lg font-semibold">{step.title}</h3>
               </div>
               <p className="mt-3 text-sm opacity-85 lg:min-h-[3rem]">{step.body}</p>
-              <div aria-hidden className="lift-in mt-4 flex-1 rounded-2xl bg-surface p-4 text-fg shadow-pop">
+              <div aria-hidden className="lift-in glass-card mt-4 flex-1 rounded-2xl bg-white/85 p-4 text-fg dark:bg-white/[0.06]">
                 {step.mock}
               </div>
             </li>

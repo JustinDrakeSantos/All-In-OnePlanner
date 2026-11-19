@@ -22,7 +22,7 @@ export function MobileNav({ account }: { account: ReactNode }) {
   const close = () => setOpen(false);
 
   return (
-    <div className="sticky top-0 z-30 flex items-center justify-between bg-bg/90 px-4 py-2.5 shadow-[0_1px_0_var(--line)] backdrop-blur md:hidden">
+    <div className="glass-nav sticky top-0 z-30 flex items-center justify-between border-b border-nav-line px-4 py-2.5 md:hidden">
       <Link href="/dashboard" className="rounded-lg">
         <Logo />
       </Link>
@@ -31,7 +31,7 @@ export function MobileNav({ account }: { account: ReactNode }) {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="grid size-10 place-items-center rounded-lg text-fg hover:bg-surface-2"
+          className="grid size-10 place-items-center rounded-lg text-fg hover:bg-nav-hover"
           aria-label="Open navigation"
           aria-expanded={open}
         >
@@ -46,17 +46,17 @@ export function MobileNav({ account }: { account: ReactNode }) {
           if (event.target === dialogRef.current) close();
         }}
         aria-label="Navigation"
-        className="m-0 ml-auto h-dvh max-h-dvh w-[min(20rem,85vw)] bg-sidebar p-0 text-fg"
+        className="m-0 ml-auto h-dvh max-h-dvh w-[min(20rem,85vw)] border-l border-nav-line bg-nav p-0 text-fg shadow-pop"
       >
         {open ? (
           <div className="flex h-full flex-col p-4">
             <div className="mb-5 flex items-center justify-between">
               <Logo />
-              <button type="button" onClick={close} className="grid size-10 place-items-center rounded-lg hover:bg-sidebar-active" aria-label="Close navigation">
+              <button type="button" onClick={close} className="grid size-10 place-items-center rounded-lg hover:bg-nav-hover" aria-label="Close navigation">
                 <X className="size-6" aria-hidden />
               </button>
             </div>
-            <nav aria-label="App" className="min-h-0 flex-1 overflow-y-auto">
+            <nav aria-label="App" className="-m-1 min-h-0 flex-1 overflow-y-auto p-1">
               <Suspense fallback={<NavList pathname={null} />}>
                 <ActiveNavList onNavigate={close} />
               </Suspense>

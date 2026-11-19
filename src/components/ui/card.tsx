@@ -4,14 +4,14 @@ import { cn } from "@/lib/cn";
 /**
  * A group of related content.
  * - "plain" (default): sits directly on the page; spacing and the heading do the grouping.
- * - "panel": a tinted surface for side summaries, so they read as secondary to the main content.
+ * - "panel": a pane of frosted glass for side summaries, so they read as secondary to the main content.
  */
 export function Card({
   className,
   variant = "plain",
   ...props
 }: ComponentProps<"section"> & { variant?: "plain" | "panel" }) {
-  return <section className={cn(variant === "panel" && "rounded-2xl bg-surface-2 p-5", className)} {...props} />;
+  return <section className={cn(variant === "panel" && "glass-panel rounded-2xl p-5", className)} {...props} />;
 }
 
 export function CardHeader({

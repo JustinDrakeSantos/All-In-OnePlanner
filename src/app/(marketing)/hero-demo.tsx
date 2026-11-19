@@ -111,7 +111,7 @@ function survey(section: HTMLElement, layer: HTMLElement, frame: HTMLElement): T
 function Note({ className, drift, children }: { className?: string; drift: number; children: ReactNode }) {
   return (
     <div
-      className={cn("drift flex items-start gap-3 rounded-2xl bg-surface p-3.5 text-left shadow-pop ring-1 ring-fg/5", className)}
+      className={cn("drift glass-card flex items-start gap-3 rounded-2xl p-3.5 text-left", className)}
       style={{ "--drift": `${drift}px` } as CSSProperties}
     >
       {children}
@@ -284,7 +284,8 @@ export function HeroDemo() {
         ) : null}
 
         <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-          <div ref={frameRef} className="hero-demo mx-auto max-w-5xl" inert={!settled} data-settled={settled ? "true" : "false"}>
+          {/* The clip sits in a thick pane of frosted glass (on ::before, so the morph still lands on the clip's own edges). */}
+          <div ref={frameRef} className="hero-demo glass-bezel mx-auto max-w-5xl [--bezel:8px] sm:[--bezel:14px]" inert={!settled} data-settled={settled ? "true" : "false"}>
             <DemoVideo
               name="dashboard"
               title="product"

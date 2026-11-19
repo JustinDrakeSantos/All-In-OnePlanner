@@ -9,7 +9,7 @@ const variants: Record<Variant, string> = {
   // The one call to action on a view: glacier with navy text (6.5:1).
   primary: "bg-primary text-primary-fg font-semibold hover:bg-primary-hover active:translate-y-px",
   // Quieter actions.
-  secondary: "bg-primary-soft text-fg hover:bg-surface-3",
+  secondary: "bg-primary-soft text-fg hover:bg-primary-soft-hover",
   outline: "bg-surface text-fg shadow-card ring-1 ring-line hover:bg-surface-2",
   ghost: "text-fg hover:bg-surface-2",
   danger: "bg-danger text-white hover:opacity-90 dark:text-bg",
