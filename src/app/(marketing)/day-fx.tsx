@@ -13,16 +13,16 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState, us
  *            the streak ticks up, the journal entry writes itself, the mood lifts)
  *   sheen    a streak of light crosses each glass card as the sun passes over it
  *   tilt     on desktop, a card tilts toward the pointer with a glare that follows it (off by default)
+ *   hang     each card swings down on a thread from its time marker, morning to night (off by default)
  *
- * Try combinations with ?dayfx=auto,sun,moments,sheen,tilt (or ?dayfx=none). Saved for later, not built yet:
- *   hang     cards swing down on threads from their time markers, morning to night
+ * Try combinations with ?dayfx=auto,sun,moments,sheen,tilt,hang (or ?dayfx=none).
  *
  * --t (the time of day, 0 → 1) lives on the section; globals.css drives it either with a timed
  * animation (data-play) or the section's scroll timeline, and only once data-live says a driver
  * is available. Without one (no JavaScript, reduced motion, or scroll mode in a browser without
  * scroll timelines) the cards show their finished state.
  */
-const ALL = ["auto", "sun", "moments", "sheen", "tilt"] as const;
+const ALL = ["auto", "sun", "moments", "sheen", "tilt", "hang"] as const;
 const DEFAULT = "auto sun moments sheen";
 const REDUCED = "(prefers-reduced-motion: reduce)";
 
@@ -54,7 +54,7 @@ export function DaySection({ className, children, ...props }: { className?: stri
   const has = (name: string) => fx.split(" ").includes(name);
   const auto = has("auto");
   const tilt = has("tilt");
-  const animated = has("sun") || has("moments") || has("sheen");
+  const animated = has("sun") || has("moments") || has("sheen") || has("hang");
   const live =
     !reduced && animated && (auto || (typeof CSS !== "undefined" && CSS.supports("animation-timeline: view()")));
 

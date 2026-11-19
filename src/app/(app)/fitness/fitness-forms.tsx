@@ -145,9 +145,10 @@ export function WaterCustomForm({ date, units }: { date: string; units: UnitSyst
 export function MetricsForm({ today, units }: { today: string; units: UnitSystem }) {
   const [state, action] = useActionState(logMetricsAction, initialFormState);
   return (
-    <form key={formKey(state)} action={action} className="space-y-3">
-      <div className="grid gap-3 sm:grid-cols-4">
-        <Field id="m-date" label="Date" error={fieldError(state, "date")}>
+    <form key={formKey(state)} action={action} className="@container space-y-3">
+      {/* Sized by the card, not the window: on the overview this card is half width, and four equal columns cut the date's year off. */}
+      <div className="grid grid-cols-3 gap-3 @2xl:grid-cols-[minmax(11rem,1.3fr)_repeat(3,minmax(0,1fr))]">
+        <Field id="m-date" label="Date" error={fieldError(state, "date")} className="col-span-3 @2xl:col-span-1">
           {(a) => <Input {...a} type="date" name="date" max={today} required defaultValue={fieldValue(state, "date", today)} />}
         </Field>
         <Field id="m-weight" label={`Weight (${weightUnit(units)})`} error={fieldError(state, "weight")}>

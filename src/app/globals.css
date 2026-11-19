@@ -1327,6 +1327,98 @@
 }
 
 /*
+ * hang: each card swings into place from its time marker on a short thread, morning to night.
+ * The swing is on .day-hang (the card's wrapper), so it never fights the sun's lift or the tilt,
+ * which move the card itself. It pivots on the marker's dot: above the card's center on wide
+ * screens, on the rail to its left on narrow ones. With auto it plays when the day starts (and on
+ * Replay); otherwise it follows the section's scroll. Without data-live the cards just hang still.
+ */
+.day-thread {
+  display: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-live][data-fx~="hang"] .day-hang {
+    transform-origin: -20px 30px;
+    --swing: 0.45; /* a smaller arc on the rail, where the pivot is beside the card */
+  }
+  /* Auto: hidden until the day starts, then each card drops in a beat after the one before. */
+  [data-live][data-fx~="hang"][data-fx~="auto"]:not([data-play]) .day-hang {
+    opacity: 0;
+  }
+  [data-live][data-fx~="hang"][data-fx~="auto"][data-play] .day-hang {
+    animation: day-hang 1.3s linear both;
+    animation-delay: calc(var(--i) * 160ms);
+  }
+  [data-live][data-fx~="hang"][data-fx~="auto"][data-play="paused"] .day-hang {
+    animation-play-state: paused;
+  }
+  @supports (animation-timeline: view()) {
+    [data-live][data-fx~="hang"]:not([data-fx~="auto"]) .day-hang {
+      animation: day-hang linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 35%;
+    }
+  }
+
+  @media (width >= 64rem) {
+    [data-live][data-fx~="hang"] .day-hang {
+      transform-origin: 50% -20px;
+      --swing: 1;
+    }
+    [data-live][data-fx~="hang"] .day-thread {
+      display: block;
+      position: absolute;
+      left: 50%;
+      top: -20px;
+      width: 1px;
+      height: 20px;
+      translate: -50% 0;
+      background: currentColor;
+      opacity: 0.3;
+    }
+    /* The row enters all at once, so stagger it by the hour instead. */
+    @supports (animation-timeline: view()) {
+      [data-live][data-fx~="hang"]:not([data-fx~="auto"]) .day-hang {
+        animation-range: entry calc(5% + var(--i) * 7%) cover calc(25% + var(--i) * 7%);
+      }
+    }
+  }
+}
+
+@keyframes day-hang {
+  /* Dropped from just above, swinging out, then settling like a pendulum losing energy. */
+  0% {
+    opacity: 0;
+    translate: 0 -18px;
+    rotate: calc(var(--swing, 1) * -12deg);
+    animation-timing-function: cubic-bezier(0.3, 0, 0.5, 1);
+  }
+  30% {
+    opacity: 1;
+    translate: 0 0;
+    rotate: calc(var(--swing, 1) * 6deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  52% {
+    rotate: calc(var(--swing, 1) * -3deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  71% {
+    rotate: calc(var(--swing, 1) * 1.4deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  86% {
+    rotate: calc(var(--swing, 1) * -0.5deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  100% {
+    opacity: 1;
+    translate: 0 0;
+    rotate: 0deg;
+  }
+}
+
+/*
  * A card's moment, from "before" (--on: 0) to "after" (--on: 1). Without the moments switch --on
  * is unset, so everything shows the after state. Only the outgoing "before" pieces vanish;
  * nothing a visitor needs waits on the sun, and the entry text is never below 35%.

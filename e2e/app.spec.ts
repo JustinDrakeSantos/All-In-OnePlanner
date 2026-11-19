@@ -213,6 +213,16 @@ test("fitness: water, habits, workouts, measurements", async ({ page }) => {
   await expect(page.getByRole("listitem").filter({ hasText: "30 min" }).filter({ hasText: "Moderate" }).first()).toBeVisible();
 
   await page.getByRole("link", { name: "Weight, steps & sleep" }).click();
+  // The date field is wide enough for the whole date, here and in the overview's half-width Steps card.
+  const date = page.getByLabel("Date", { exact: true });
+  const dateWidth = () => date.evaluate((el) => el.getBoundingClientRect().width);
+  await expect(date).toBeVisible();
+  await expect.poll(dateWidth).toBeGreaterThanOrEqual(170);
+  await page.goto("/fitness");
+  await expect(date).toBeVisible();
+  await expect.poll(dateWidth).toBeGreaterThanOrEqual(170);
+  await page.getByRole("link", { name: "Weight, steps & sleep" }).click();
+  await expect(page.getByRole("heading", { name: "Log measurements" })).toBeVisible();
   await page.getByLabel("Weight (lb)").fill("160");
   await page.getByLabel("Steps", { exact: true }).fill("9000");
   await page.getByRole("button", { name: "Save measurements" }).click();
@@ -358,6 +368,82 @@ test("landing: product clips play, and the tour switches and pauses them", async
   await tour.getByRole("button", { name: "Pause Mood demo" }).click();
   await expect(tour.getByRole("button", { name: "Play Mood demo" })).toBeVisible();
   expect(await tour.locator("video").evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
+});
+
+test("landing: the day timeline plays when in view, and Play, Pause and Replay control it", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const day = page.locator(".day-section");
+  const time = () => day.evaluate((el) => Number(getComputedStyle(el).getPropertyValue("--t")));
+  await expect(day).toHaveAttribute("data-fx", "auto sun moments sheen");
+  await expect(day).toHaveAttribute("data-live", "");
+  await expect(day).not.toHaveAttribute("data-play");
+
+  // It starts on its own once the section is on screen.
+  await day.locator("ol").scrollIntoViewIfNeeded();
+  await expect(day).toHaveAttribute("data-play", "playing");
+  await expect(day.locator(".day-sun")).toBeVisible();
+  await expect.poll(time).toBeGreaterThan(0);
+
+  // Pause holds the sun where it is.
+  await day.getByRole("button", { name: "Pause the day's animation" }).click();
+  await expect(day).toHaveAttribute("data-play", "paused");
+  const held = await time();
+  await page.waitForTimeout(800);
+  expect(await time()).toBe(held);
+
+  // Play resumes it, and it rests at night when the day is over.
+  await day.getByRole("button", { name: "Play the day's animation" }).click();
+  await expect(day).toHaveAttribute("data-play", "playing");
+  await expect(day).toHaveAttribute("data-play", "done", { timeout: 15_000 });
+  expect(await time()).toBe(1);
+
+  // Replay starts again from dawn.
+  await day.getByRole("button", { name: "Replay the day's animation" }).click();
+  await expect(day).toHaveAttribute("data-play", "playing");
+  await expect.poll(time).toBeLessThan(0.5);
+});
+
+test("landing: the day timeline's ?dayfx= switches, including hang", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const day = page.locator(".day-section");
+  const cards = day.locator(".day-hang");
+
+  // No effects: nothing animates, there's no button, and every card is simply there.
+  await page.goto("/?dayfx=none");
+  await expect(day).toHaveAttribute("data-fx", "");
+  await expect(day).not.toHaveAttribute("data-live");
+  await expect(day.getByRole("button", { name: /the day's animation/ })).toHaveCount(0);
+  await expect(day.locator(".day-sun")).toBeHidden();
+
+  // Unknown names are dropped; hang on its own follows the scroll (no button).
+  await page.goto("/?dayfx=hang,bogus");
+  await expect(day).toHaveAttribute("data-fx", "hang");
+  await expect(day).toHaveAttribute("data-live", "");
+  await expect(day.getByRole("button", { name: /the day's animation/ })).toHaveCount(0);
+
+  // With auto, the cards are hidden until the day starts, then each swings down on its thread and settles.
+  await page.goto("/?dayfx=auto,hang");
+  await expect(day).toHaveAttribute("data-fx", "auto hang");
+  expect(await cards.first().evaluate((el) => getComputedStyle(el).opacity)).toBe("0");
+  await expect(day.locator(".day-thread").first()).toBeAttached();
+  await day.locator("ol").scrollIntoViewIfNeeded();
+  await expect(day).toHaveAttribute("data-play", "playing");
+  await expect
+    .poll(() => cards.evaluateAll((els) => els.map((el) => `${getComputedStyle(el).opacity} ${getComputedStyle(el).rotate}`)), { timeout: 5_000 })
+    .toEqual(Array(6).fill("1 0deg"));
+  expect(await day.locator(".day-thread").first().evaluate((el) => getComputedStyle(el).display)).toBe("block");
+});
+
+test("landing: with reduced motion, the day timeline holds still with every card shown", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/?dayfx=auto,sun,moments,sheen,hang");
+  const day = page.locator(".day-section");
+  await day.locator("ol").scrollIntoViewIfNeeded();
+  await expect(day).not.toHaveAttribute("data-live");
+  await expect(day).not.toHaveAttribute("data-play");
+  await expect(day.getByRole("button", { name: /the day's animation/ })).toHaveCount(0);
+  expect(await day.locator(".day-hang").evaluateAll((els) => els.map((el) => getComputedStyle(el).opacity))).toEqual(Array(6).fill("1"));
 });
 
 test("landing: the FAQ opens and closes", async ({ page }) => {

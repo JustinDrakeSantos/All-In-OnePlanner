@@ -194,7 +194,10 @@ export function DayTimeline() {
                 <p aria-hidden className="marker-in absolute inset-x-0 top-[calc(var(--dot)-34px)] hidden text-center text-sm font-semibold text-fg tabular-nums lg:block">
                   {moment.time}
                 </p>
-                <article data-tilt className={cn("day-card glass-tint flex h-full flex-col rounded-3xl p-5 lg:mt-[calc(var(--dot)+20px)] lg:h-auto", moment.sky)}>
+                {/* The card hangs from its time marker; with the hang switch it swings into place on its thread. */}
+                <div className="day-hang relative h-full lg:mt-[calc(var(--dot)+20px)] lg:h-auto">
+                <span aria-hidden className="day-thread" />
+                <article data-tilt className={cn("day-card glass-tint flex h-full flex-col rounded-3xl p-5", moment.sky)}>
                   <div className="flex items-center justify-between gap-2">
                     <p className="text-sm font-semibold tabular-nums lg:sr-only">{moment.time}</p>
                     <span className="grid size-9 place-items-center rounded-full bg-current/10" aria-hidden>
@@ -206,6 +209,7 @@ export function DayTimeline() {
                   {moment.detail ? <div className="mt-4">{moment.detail}</div> : null}
                   <p className="mt-auto pt-5 text-meta font-medium opacity-70">{moment.tool}</p>
                 </article>
+                </div>
               </li>
             );
           })}
